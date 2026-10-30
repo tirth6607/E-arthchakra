@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="105 115 620 620" role="img" aria-label="E-arthchakra">
+<path d="M170,322 A262,262 0 0 1 642,336" fill="none" stroke="#2EA05A" stroke-width="34" stroke-linecap="round"/>
+<path d="M616,346 L700,308 L688,398 Z" fill="#2EA05A"/>
+<path d="M658,500 A262,262 0 0 1 182,512" fill="none" stroke="#0B4A33" stroke-width="34" stroke-linecap="round"/>
+<path d="M126,522 L140,430 L212,492 Z" fill="#0B4A33"/>
+<rect x="298" y="292" width="55" height="243" rx="7" fill="#0B4A33"/>
+<path d="M353,292 H432 C478,292 508,304 536,317 C508,330 478,341 432,341 H353 Z" fill="#2EA05A"/>
+<rect x="353" y="390" width="128" height="48" fill="#6CC48E"/>
+<path d="M353,487 H432 C478,487 508,499 536,512 C508,525 478,536 432,536 H353 Z" fill="#2EA05A"/>
+<circle cx="523" cy="414" r="50" fill="#0B4A33"/>
+<path d="M500,392 H546 M500,408 H546 M503,392 C540,392 540,428 503,428 L533,446" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
