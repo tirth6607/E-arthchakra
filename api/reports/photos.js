@@ -2,7 +2,7 @@ const WasteReport = require("../../models/WasteReport");
 const { route, HttpError } = require("../../lib/http");
 const { storePhoto, removePhoto, validPhotoRef } = require("../../lib/upload");
 
-// POST   /api/reports/photos  { photo: "data:image/...;base64,..." } -> { photo: { url, key } }
+// POST   /api/reports/photos  { photo: "data:image/jpeg;base64,..." } -> { photo: { url, key } }
 // DELETE /api/reports/photos  { url, key }  -> removes one of MY photos that is not yet attached to a report
 module.exports = route({ methods: ["POST", "DELETE"], auth: true, roles: ["customer", "admin"] }, async (req, res, user) => {
   if (Number(req.headers["content-length"] || 0) > 4 * 1024 * 1024) throw new HttpError(413, "Photo is too large.");
@@ -16,6 +16,6 @@ module.exports = route({ methods: ["POST", "DELETE"], auth: true, roles: ["custo
     return res.json({ ok: true });
   }
 
-  const p = await storePhoto(b.photo, user._id); // checks real bytes (JPEG/PNG/WebP) and size
+  const p = await storePhoto(b.photo, user._id, { jpegOnly: true }); // live camera captures are JPEG; checks real bytes and size
   res.status(201).json({ photo: { url: p.url, key: p.key, uploadedAt: new Date() } });
 });

@@ -23,6 +23,8 @@
 .rp-chips span{display:inline-block;padding:10px 18px;border-radius:99px;border:1px solid var(--border);background:var(--off-white);font-weight:700;font-size:.86rem}
 .rp-chips input:checked+span{background:var(--green-800);color:#fff;border-color:var(--green-800)}
 .rp-loc{margin-top:14px;padding:14px 16px;border-radius:14px;font-size:.88rem;display:none;line-height:1.6}.rp-loc.ok{display:block;background:#eaf6ec;color:#18532f}.rp-loc.warn{display:block;background:#fff6dd;color:#7a5600}.rp-loc.err{display:block;background:#fdeeee;color:#9b2c2c}
+.rp-camwrap{display:none;margin-top:14px}.rp-camwrap.on{display:block}.rp-camwrap video{width:100%;max-height:420px;border-radius:16px;background:#111;display:block;object-fit:cover}
+.rp-shot{background:var(--green-800);color:#fff;border-color:var(--green-800)}.rp-shot:hover{background:var(--green-800)}.rp-ph b.old{background:rgba(155,44,44,.9)}
 #map{display:none;height:250px;border-radius:16px;margin-top:14px;z-index:0}.rp-note{font-size:.76rem;color:var(--text-light);margin-top:10px}
 .rp textarea{width:100%;min-height:90px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--off-white);font:inherit;font-size:.92rem;resize:vertical}
 .rp-chk{display:flex;gap:16px;flex-wrap:wrap;margin:6px 2px 8px;font-size:.88rem;font-weight:700;color:var(--text-light)}.rp-chk .ok{color:#18532f}
@@ -99,20 +101,23 @@
       <textarea id="desc" maxlength="500" placeholder="e.g. Pile of old pipes behind the market"></textarea>
     </div>
 
-    <div class="rp-card"><h2><i>2</i> Upload photos</h2>
-      <p class="h">Up to 5 photos · JPG, PNG or WebP · 5 MB each · <span id="pcount">0/5</span></p>
-      <div class="rp-row"><button type="button" class="rp-b" id="cam">📷 Camera</button><button type="button" class="rp-b" id="pick">🖼 Choose Photos</button></div>
-      <input type="file" id="fCam" accept="image/*" capture="environment" hidden>
-      <input type="file" id="fPick" accept="image/jpeg,image/png,image/webp" multiple hidden>
+    <div class="rp-card"><h2><i>2</i> Take photos</h2>
+      <p class="h">Up to 5 photos, taken live with your camera at the spot · <span id="pcount">0/5</span><br>Your location is recorded with each photo, so location access is required. Submit within 5 minutes of taking them.</p>
+      <button type="button" class="rp-b" id="cam" style="width:100%">📷 Open Camera</button>
+      <div class="rp-camwrap" id="camwrap">
+        <video id="video" playsinline muted autoplay></video>
+        <div class="rp-row" style="margin-top:10px"><button type="button" class="rp-b rp-shot" id="shot" disabled>● Capture</button><button type="button" class="rp-b" id="camoff">Close camera</button></div>
+        <p class="rp-note" id="gpsnote">Waiting for your location…</p>
+      </div>
+      <div class="rp-loc" id="camerr" role="alert"></div>
       <div class="rp-grid" id="grid"></div>
     </div>
 
-    <div class="rp-card"><h2><i>3</i> Location</h2>
-      <p class="h">Your location is used only to identify the waste collection/reporting location. We only ask when you tap the button.</p>
-      <button type="button" class="rp-b" id="gps" style="width:100%">📍 Use My Current Location</button>
+    <div class="rp-card"><h2><i>3</i> Where is the waste?</h2>
+      <p class="h">The pin starts where you took the first photo. Drag it if the waste is somewhere else nearby.</p>
       <div class="rp-loc" id="loc" role="status"></div>
       <div id="map" aria-label="Map preview"></div>
-      <p class="rp-note" id="mapnote" style="display:none">Drag the pin if it is slightly off — the pin position is what we save.</p>
+      <p class="rp-note" id="mapnote" style="display:none">Drag the pin to the waste. <a href="#" id="repin">Move pin back to the photo location</a></p>
     </div>
 
     <div class="rp-chk" id="chk"><span id="cp">○ Photo</span><span id="cl">○ Location</span><span id="ct">○ Waste type</span></div>
@@ -120,10 +125,10 @@
     <button type="submit" class="btn btn-primary btn-large" id="send" style="width:100%" disabled>Submit Waste Report</button>
   </form>
 
-  <div class="rp-card rp-ok" id="done"><b>✅</b><h2>Waste report submitted successfully.</h2><p style="color:var(--text-medium)">Our team will review it shortly. Follow its status below.</p>
+  <div class="rp-card rp-ok" id="done"><b>✅</b><h2>Waste report submitted successfully.</h2><p style="color:var(--text-medium)" id="donetxt">Our team will review it shortly. Follow its status below.</p>
     <button class="rp-b" id="again" style="margin-top:18px;flex:none;min-width:220px">Report another</button></div>
 
-  <div class="rp-card" style="margin-top:34px"><h2>My reports</h2><div class="rp-my" id="my"><p style="color:var(--text-light);font-size:.9rem">Loading…</p></div></div>
+  <div class="rp-card" style="margin-top:34px"><h2>My reports <span id="pts" style="margin-left:auto;font-size:.82rem;color:var(--text-medium)"></span></h2><div class="rp-my" id="my"><p style="color:var(--text-light);font-size:.9rem">Loading…</p></div></div>
 </main>
 
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
@@ -134,90 +139,118 @@ const $ = (i) => document.getElementById(i);
 const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 const TYPES = ["Plastic","Paper","Cardboard","Metal","Glass","E-waste","Mixed","Other"];
 const LABEL = {NEW:"Received",VERIFIED:"Verified",REJECTED:"Not accepted",ASSIGNED:"Collector assigned",COLLECTING:"Being collected",COLLECTED:"Collected",RECYCLED:"Recycled"};
-const MAX_PHOTOS = 5, MAX_BYTES = 5 * 1024 * 1024, GOOD_ACCURACY = 100;
+const MAX_PHOTOS = 5;
 let me = null; try { me = JSON.parse(localStorage.getItem("earthchakra_user") || "null"); } catch (e) {}
 if (!me || !me.loggedIn) location.replace("login.html");
 $("types").innerHTML = TYPES.map((t) => `<label><input type="radio" name="wt" value="${t}"><span>${t}</span></label>`).join("");
 document.querySelectorAll('input[name="wt"]').forEach((r) => r.onchange = refresh);
 
-/* ---------- photos: preview, remove, compress ---------- */
-let photos = [], gps = null, busy = false, map = null, marker = null, seq = 0;   // photos: {id, data, ref|null}
+/* ---------- live camera: capture → canvas → JPEG, with a GPS fix per photo ---------- */
+let photos = [], busy = false, map = null, marker = null, seq = 0;   // photos: {id, data, capturedAt, lat, lng, accuracy, ref|null}
+let claimed = null;            // {lat, lng, moved} – the map pin: where the reporter says the waste is
+let stream = null, watchId = null, fix = null, locDenied = false;
+const MAX_AGE = 4 * 60e3;       // server rejects photos older than 5 min; leave time for the upload
+const FAR = 200;
 const isNetwork = (e) => /failed to fetch|network|load failed/i.test(e.message);
+const old = (p) => Date.now() - p.capturedAt > MAX_AGE;
 function fail(t) { $("msg").textContent = t; $("msg").className = "rp-msg show"; }
 function clearMsg() { $("msg").className = "rp-msg"; }
+function camErr(t) { $("camerr").textContent = t; $("camerr").className = t ? "rp-loc err" : "rp-loc"; }
 function drawPhotos() {
-  $("grid").innerHTML = photos.map((p) => `<div class="rp-ph"><img src="${p.data}" alt="Selected photo"><button type="button" data-id="${p.id}" aria-label="Remove photo" ${busy ? "disabled" : ""}>×</button>${p.ref ? "<b>uploaded</b>" : ""}</div>`).join("");
+  $("grid").innerHTML = photos.map((p) => `<div class="rp-ph"><img src="${p.data}" alt="Captured photo"><button type="button" data-id="${p.id}" aria-label="Remove photo" ${busy ? "disabled" : ""}>×</button>${old(p) ? '<b class="old">too old, retake</b>' : p.ref ? "<b>uploaded</b>" : ""}</div>`).join("");
   $("grid").querySelectorAll("button").forEach((b) => b.onclick = () => removePhoto(+b.dataset.id));
-  $("pcount").textContent = photos.length + "/" + MAX_PHOTOS; $("cam").disabled = $("pick").disabled = busy || photos.length >= MAX_PHOTOS; refresh();
+  $("pcount").textContent = photos.length + "/" + MAX_PHOTOS;
+  $("cam").disabled = busy || photos.length >= MAX_PHOTOS; $("shot").disabled = busy || !fix || photos.length >= MAX_PHOTOS;
+  refresh();
 }
 async function removePhoto(id) {
-  const p = photos.find((x) => x.id === id); photos = photos.filter((x) => x.id !== id); drawPhotos();
+  const p = photos.find((x) => x.id === id); photos = photos.filter((x) => x.id !== id);
+  if (!photos.length) { claimed = null; hideMap(); } else if (claimed && !claimed.moved) setClaimed(photos[0].lat, photos[0].lng, false);
+  drawPhotos();
   if (p && p.ref) EcoAPI.call("/reports/photos", {method: "DELETE", body: p.ref}).catch(() => {});   // frees the cloud copy
 }
-async function compress(file) {
-  let bmp; try { bmp = await createImageBitmap(file, {imageOrientation: "from-image"}); }
-  catch (e) { bmp = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = URL.createObjectURL(file); }); }
+function gpsNote() {
+  $("gpsnote").textContent = locDenied ? "Location permission was denied – photos can't be taken without it."
+    : !fix ? "Waiting for your location…" : `Location ready (±${Math.round(fix.accuracy)} m)${fix.accuracy > 100 ? " – accuracy is low, move to an open area if you can." : ""}`;
+}
+function stopCamera() {
+  if (stream) stream.getTracks().forEach((t) => t.stop());
+  if (watchId != null) navigator.geolocation.clearWatch(watchId);
+  stream = null; watchId = null; fix = null; $("video").srcObject = null; $("camwrap").classList.remove("on"); drawPhotos();
+}
+$("cam").onclick = async () => {
+  clearMsg(); camErr("");
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return camErr("This browser can't open the camera. Please use Chrome or Safari on your phone (the site must be opened over https).");
+  if (!("geolocation" in navigator)) return camErr("This browser can't share your location, which is needed for every photo. Please use Chrome or Safari.");
+  // Location first: no location, no photos.
+  locDenied = false;
+  watchId = navigator.geolocation.watchPosition((p) => { fix = {lat: p.coords.latitude, lng: p.coords.longitude, accuracy: p.coords.accuracy, at: Date.now()}; gpsNote(); drawPhotos(); },
+    (e) => { if (e.code === 1) { locDenied = true; stopCamera(); camErr("Location permission was denied. A report needs the location of each photo – please allow location for this site in your browser settings, then open the camera again."); } else gpsNote(); },
+    {enableHighAccuracy: true, timeout: 20000, maximumAge: 0});
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: {ideal: "environment"}, width: {ideal: 1920}, height: {ideal: 1080}}});
+  } catch (e) {
+    stopCamera();
+    return camErr(e.name === "NotAllowedError" ? "Camera permission was denied. Please allow camera access for this site in your browser settings, then try again."
+      : e.name === "NotFoundError" ? "No camera was found on this device." : "The camera couldn't be opened. Please close other apps using it and try again.");
+  }
+  if (locDenied) return stopCamera();
+  $("video").srcObject = stream; $("camwrap").classList.add("on"); gpsNote(); drawPhotos();
+};
+$("camoff").onclick = stopCamera;
+document.addEventListener("visibilitychange", () => { if (document.hidden && stream) stopCamera(); });
+$("shot").onclick = () => {
+  const v = $("video");
+  if (!v.videoWidth || !fix) return;
+  if (Date.now() - fix.at > 30e3) { gpsNote(); return camErr("Your location hasn't updated in a while. Wait a moment for a fresh location, then capture again."); }
+  camErr("");
+  const capturedAt = Date.now(), here = fix;
+  let data = null;
   for (const [max, q] of [[1600, .82], [1280, .7], [1000, .6]]) {
-    const s = Math.min(1, max / Math.max(bmp.width, bmp.height)), c = document.createElement("canvas");
-    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s); c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
-    const d = c.toDataURL("image/jpeg", q); if (d.length < 2.6e6) return d;     // keeps each request under Vercel's 4.5 MB cap
+    const s = Math.min(1, max / Math.max(v.videoWidth, v.videoHeight)), c = document.createElement("canvas");
+    c.width = Math.round(v.videoWidth * s); c.height = Math.round(v.videoHeight * s); c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+    data = c.toDataURL("image/jpeg", q); if (data.length < 2.6e6) break;     // keeps each request under Vercel's 4.5 MB cap
   }
-  throw new Error("too big");
-}
-async function addFiles(files) {
-  clearMsg();
-  for (const f of files) {
-    if (photos.length >= MAX_PHOTOS) return fail("You can add up to 5 photos.");
-    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { fail("Unsupported image format. Please use JPG, PNG or WebP."); continue; }
-    if (f.size > MAX_BYTES) { fail("Photo is larger than 5 MB."); continue; }
-    try { photos.push({id: ++seq, data: await compress(f), ref: null}); drawPhotos(); } catch (e) { fail("We couldn't read that photo. Please try another."); }
-  }
-}
-$("cam").onclick = () => $("fCam").click(); $("pick").onclick = () => $("fPick").click();
-[$("fCam"), $("fPick")].forEach((inp) => inp.onchange = () => { const f = [...inp.files]; inp.value = ""; addFiles(f); });
+  photos.push({id: ++seq, data, capturedAt, lat: here.lat, lng: here.lng, accuracy: here.accuracy, ref: null});
+  if (!claimed) setClaimed(here.lat, here.lng, false);
+  if (photos.length >= MAX_PHOTOS) stopCamera(); else drawPhotos();
+};
+setInterval(() => { if (photos.some(old)) drawPhotos(); }, 15e3);   // show "too old" badges as photos age
 
-/* ---------- GPS + map ---------- */
-function paintLoc() {
-  const L_ = $("loc"), low = gps.locationAccuracy > GOOD_ACCURACY;
-  L_.className = "rp-loc " + (low ? "warn" : "ok");
-  L_.innerHTML = `${low ? "⚠ " : ""}Location captured ✓<br>Latitude: ${gps.latitude.toFixed(6)}<br>Longitude: ${gps.longitude.toFixed(6)}<br>Accuracy: ${Math.round(gps.locationAccuracy)} meters${gps.moved ? "<br>Pin moved by you" : ""}`
-    + (low ? "<br><b>Your location accuracy is low. Please move to an open area and tap the button again.</b>" : "");
+/* ---------- claimed location: map pin, starts at the first photo ---------- */
+function distM(a, b) {
+  const R = 6371000, r = Math.PI / 180, dLat = (b.lat - a.lat) * r, dLng = (b.lng - a.lng) * r;
+  return Math.round(2 * R * Math.asin(Math.sqrt(Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLng / 2) ** 2)));
 }
-function showMap() {
-  if (typeof L === "undefined") return;                       // map is optional; GPS still works
+function paintLoc() {
+  const d = photos.length ? distM(photos[0], claimed) : 0, far = d > FAR, low = photos.length && photos[0].accuracy > 100;
+  $("loc").className = "rp-loc " + (far || low ? "warn" : "ok");
+  $("loc").innerHTML = `Waste location: ${claimed.lat.toFixed(6)}, ${claimed.lng.toFixed(6)}${claimed.moved ? ` · ${d} m from where you took the photo` : " · same as the photo"}`
+    + (far ? `<br><b>The pin is more than ${FAR} m from where you took the photo, so this report will be checked by our team.</b>` : "")
+    + (low ? `<br>GPS accuracy was low (±${Math.round(photos[0].accuracy)} m).` : "");
+}
+function setClaimed(lat, lng, moved) {
+  claimed = {lat, lng, moved}; paintLoc(); refresh();
+  if (typeof L === "undefined") return;                       // map is optional; the photo location still works
   $("map").style.display = "block"; $("mapnote").style.display = "block";
   if (!map) {
-    map = L.map("map").setView([gps.latitude, gps.longitude], 17);
+    map = L.map("map").setView([lat, lng], 17);
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap"}).addTo(map);
-    marker = L.marker([gps.latitude, gps.longitude], {draggable: true}).addTo(map);
-    marker.on("dragend", () => { const p = marker.getLatLng(); gps.latitude = p.lat; gps.longitude = p.lng; gps.moved = true; paintLoc(); });
-  } else { map.setView([gps.latitude, gps.longitude], 17); marker.setLatLng([gps.latitude, gps.longitude]); }
+    marker = L.marker([lat, lng], {draggable: true}).addTo(map);
+    marker.on("dragend", () => { const p = marker.getLatLng(); claimed = {lat: p.lat, lng: p.lng, moved: true}; paintLoc(); });
+  } else if (!moved) { map.setView([lat, lng], 17); marker.setLatLng([lat, lng]); }
   setTimeout(() => map.invalidateSize(), 80);
 }
-$("gps").onclick = () => {
-  clearMsg(); const L_ = $("loc"), b = $("gps");
-  const err = (t) => { L_.className = "rp-loc err"; L_.textContent = t; };
-  if (!("geolocation" in navigator)) return err("This browser can't share your location. Try Chrome or Safari.");
-  b.disabled = true; b.textContent = "Getting your location..."; L_.className = "rp-loc";
-  navigator.geolocation.getCurrentPosition((p) => {
-    b.disabled = false; b.textContent = "📍 Use My Current Location again";
-    gps = {latitude: p.coords.latitude, longitude: p.coords.longitude, locationAccuracy: p.coords.accuracy, locationTimestamp: p.timestamp || Date.now(), moved: false};
-    paintLoc(); showMap(); refresh();
-  }, (e) => {
-    b.disabled = false; b.textContent = "📍 Try again"; gps = null; refresh();
-    err(e.code === 1 ? "Location permission was denied. Please enable location permission in your browser settings, then tap “Try again”."
-      : e.code === 3 ? "Getting your location took too long. Please try again, ideally outdoors."
-      : "Unable to determine your location. Please try again.");
-  }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
-};
+function hideMap() { $("loc").className = "rp-loc"; $("map").style.display = "none"; $("mapnote").style.display = "none"; }
+$("repin").onclick = (e) => { e.preventDefault(); if (photos.length) setClaimed(photos[0].lat, photos[0].lng, false); };
 
 /* ---------- validity + submit ---------- */
 const type = () => document.querySelector('input[name="wt"]:checked');
 function refresh() {
   const t = (el, ok, label) => { el.className = ok ? "ok" : ""; el.textContent = (ok ? "✓ " : "○ ") + label; };
   t($("cp"), photos.length > 0, photos.length ? photos.length + " photo" + (photos.length > 1 ? "s" : "") : "Photo");
-  t($("cl"), !!gps, gps ? "Location captured" : "Location"); t($("ct"), !!type(), "Waste type");
-  $("send").disabled = busy || !(photos.length && gps && type());
+  t($("cl"), !!claimed, claimed ? "Location set" : "Location"); t($("ct"), !!type(), "Waste type");
+  $("send").disabled = busy || !(photos.length && claimed && type());
 }
 async function uploadAll() {
   const todo = photos.filter((p) => !p.ref);
@@ -227,27 +260,35 @@ async function uploadAll() {
     todo[i].ref = {url: photo.url, key: photo.key}; drawPhotos();
   }
 }
+const DONE = {VERIFIED: "Your photos passed our checks and the report is accepted. A collector will be assigned soon.",
+  NEW: "Our team will review it shortly. Follow its status below.",
+  REJECTED: "We couldn't accept this report automatically. If you think that's a mistake, please contact us."};
 $("rf").onsubmit = async (e) => {
   e.preventDefault(); clearMsg(); if (busy || $("send").disabled) return;
-  if (Date.now() - gps.locationTimestamp > 25 * 60e3) { gps = null; refresh(); return fail("Your location is out of date. Please capture it again."); }
+  if (photos.some((p) => p.lat == null)) return fail("Every photo needs a location. Please retake it with location allowed.");
+  if (photos.some(old)) { drawPhotos(); return fail("Some photos were taken more than 4 minutes ago. Remove the ones marked “too old” and take them again."); }
   busy = true; drawPhotos(); $("send").disabled = true;
   try {
     await uploadAll();
-    $("send").textContent = "Submitting...";
-    await EcoAPI.call("/reports", {method: "POST", body: {photos: photos.map((p) => p.ref), wasteType: type().value, description: $("desc").value.trim(),
-      latitude: gps.latitude, longitude: gps.longitude, locationAccuracy: gps.locationAccuracy, locationTimestamp: gps.locationTimestamp}});
+    $("send").textContent = "Checking photos...";
+    const {report} = await EcoAPI.call("/reports", {method: "POST", body: {
+      photos: photos.map((p) => ({...p.ref, capturedAt: p.capturedAt, lat: p.lat, lng: p.lng, accuracy: p.accuracy})),
+      claimedLat: claimed.lat, claimedLng: claimed.lng, wasteType: type().value, description: $("desc").value.trim()}});
+    stopCamera();
+    $("donetxt").textContent = DONE[report.status] || DONE.NEW;
     $("rf").style.display = "none"; $("done").classList.add("show"); loadMine();
   } catch (err) { fail(isNetwork(err) ? "Network problem. Please check your connection and try again." : /upload|photo/i.test(err.message) ? err.message : (photos.some((p) => !p.ref) ? "Photo upload failed. Please try again." : err.message)); }
   busy = false; $("send").textContent = "Submit Waste Report"; drawPhotos();
 };
-$("again").onclick = () => { $("rf").reset(); photos = []; gps = null; $("loc").className = "rp-loc"; $("map").style.display = "none"; $("mapnote").style.display = "none"; $("gps").textContent = "📍 Use My Current Location"; drawPhotos(); $("done").classList.remove("show"); $("rf").style.display = ""; scrollTo(0, 0); };
+$("again").onclick = () => { $("rf").reset(); photos = []; claimed = null; hideMap(); camErr(""); drawPhotos(); $("done").classList.remove("show"); $("rf").style.display = ""; scrollTo(0, 0); };
 
 async function loadMine() {
   try {
     const {reports} = await EcoAPI.call("/reports");
-    $("my").innerHTML = reports.length ? reports.map((r) => `<div class="rp-item"><img src="${esc(r.photos && r.photos[0] ? r.photos[0].url : r.photoUrl)}" alt="" loading="lazy"><div><b>${esc(r.wasteType)}</b> · ${(r.photos || []).length || 1} photo(s)<br>${new Date(r.createdAt).toLocaleString()}</div><span class="st ${esc(r.status)}">${esc(LABEL[r.status] || r.status)}</span></div>`).join("")
+    $("my").innerHTML = reports.length ? reports.map((r) => `<div class="rp-item"><img src="${esc(r.photos && r.photos[0] ? r.photos[0].url : r.photoUrl)}" alt="" loading="lazy"><div><b>${esc(r.wasteType)}</b> · ${(r.photos || []).length || 1} photo(s)${r.rewardPoints ? ` · <b style="color:#18532f">+${r.rewardPoints} points</b>` : ""}<br>${new Date(r.createdAt).toLocaleString()}</div><span class="st ${esc(r.status)}">${esc(LABEL[r.status] || r.status)}</span></div>`).join("")
       : `<p style="color:var(--text-light);font-size:.9rem">You haven't reported anything yet.</p>`;
   } catch (e) { $("my").innerHTML = `<p style="color:var(--text-light)">${esc(e.message)}</p>`; }
+  EcoAPI.refreshUser().then((u) => { $("pts").textContent = `Your points: ${u.points || 0}`; }).catch(() => {});
 }
 drawPhotos(); loadMine();
 </script>

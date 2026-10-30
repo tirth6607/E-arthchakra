@@ -22,6 +22,8 @@ const userSchema = new mongoose.Schema(
     // For role === "partner": self-registered partners start "pending" until an admin approves them.
     // Defaults to "approved" so partner accounts created before self-registration keep working.
     partnerStatus: { type: String, enum: ["pending", "approved", "suspended"], default: "approved" },
+    // Earned from waste reports once a pickup partner confirms them on site (api/reports/[id].js).
+    points: { type: Number, default: 0, min: 0 },
     // Set on password reset; login cookies issued before this are rejected (lib/auth.js).
     passwordChangedAt: { type: Date, default: null }
   },
@@ -41,6 +43,7 @@ userSchema.methods.toClient = function () {
     role: this.role,
     partnerName: this.partnerName,
     partnerStatus: this.role === "partner" ? this.partnerStatus : undefined,
+    points: this.points || 0,
     createdAt: this.createdAt,
     loggedIn: true
   };

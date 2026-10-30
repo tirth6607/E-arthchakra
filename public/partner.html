@@ -127,6 +127,19 @@
         </a>
 
 
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="reports"
+        >
+
+            <span>📍</span>
+
+            Waste Reports
+
+        </a>
+
+
         <div class="dashboard-nav-label">
             ACCOUNT
         </div>
@@ -855,6 +868,37 @@
 
 
 <!-- =====================================================
+     WASTE REPORTS (community reports assigned to this partner)
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-reports"
+>
+
+    <div class="dashboard-page-header">
+        <div>
+            <span class="dashboard-date">COMMUNITY REPORTS</span>
+            <h1>Waste Reports</h1>
+            <p>Reports assigned to you. When you reach the spot, check the waste matches the photo and confirm it — that's what earns the reporter their points.</p>
+        </div>
+    </div>
+
+    <div class="dashboard-panel">
+        <div class="activity-table-wrapper">
+            <table class="activity-table">
+                <thead><tr><th>PHOTO</th><th>TYPE</th><th>LOCATION</th><th>STATUS</th><th>ON SITE</th></tr></thead>
+                <tbody id="partnerReportsTable">
+                    <tr><td colspan="5" style="text-align:center;padding:40px;color:#8a958c;">Loading…</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+
+<!-- =====================================================
      PROFILE
 ===================================================== -->
 
@@ -1267,6 +1311,16 @@ function showPartnerSection(
     ) {
 
         loadPartnerHistory();
+
+    }
+
+
+    if (
+        sectionName ===
+        "reports"
+    ) {
+
+        loadPartnerReports();
 
     }
 
@@ -2862,6 +2916,38 @@ setInterval(
     },
     15000
 );
+
+
+/* =====================================================
+   WASTE REPORTS: confirm on site → reporter gets points
+===================================================== */
+
+async function loadPartnerReports() {
+    const body = document.getElementById("partnerReportsTable");
+    const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+    const empty = (t) => `<tr><td colspan="5" style="text-align:center;padding:40px;color:#8a958c;">${esc(t)}</td></tr>`;
+    try {
+        const { reports } = await EcoAPI.call("/reports");
+        body.innerHTML = reports.length ? reports.map((r) => `<tr>
+            <td><a href="${esc(r.photoUrl)}" target="_blank" rel="noopener"><img src="${esc(r.photoUrl)}" alt="Reported waste" loading="lazy" style="width:56px;height:56px;border-radius:10px;object-fit:cover;display:block"></a></td>
+            <td><b>${esc(r.wasteType)}</b>${r.description ? `<br><small>${esc(r.description)}</small>` : ""}</td>
+            <td><a href="https://www.google.com/maps/dir/?api=1&destination=${r.latitude},${r.longitude}" target="_blank" rel="noopener">Navigate</a></td>
+            <td>${esc(r.status)}</td>
+            <td>${r.siteVerifiedAt ? "✓ Confirmed" : ["ASSIGNED", "COLLECTING", "COLLECTED"].includes(r.status)
+                ? `<button class="btn btn-primary" data-site="${esc(r.id)}" style="padding:8px 14px;font-size:.8rem">Confirm on site</button>` : "—"}</td>
+        </tr>`).join("") : empty("No waste reports assigned to you.");
+        body.querySelectorAll("[data-site]").forEach((b) => b.onclick = async () => {
+            if (!confirm("Confirm you are at this spot and the waste matches the photo? The reporter will be awarded their points.")) return;
+            b.disabled = true;
+            try {
+                await EcoAPI.call("/reports/" + b.dataset.site, { method: "PATCH", body: { action: "site-verify" } });
+                loadPartnerReports();
+            } catch (e) { alert(e.message); b.disabled = false; }
+        });
+    } catch (e) {
+        body.innerHTML = empty(e.message);
+    }
+}
 
 
 </script>
