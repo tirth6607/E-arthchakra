@@ -24,8 +24,9 @@ module.exports = route({ methods: ["GET", "POST"], auth: true, roles: ["customer
     let filter = { user: user._id };
     if (admin) filter = {};
     if (user.role === "partner") {
-      if (user.partnerStatus !== "approved" || !user.partnerName) return res.json({ reports: [] });
-      filter = { collector: user.partnerName, status: { $in: ["ASSIGNED", "COLLECTING", "COLLECTED", "RECYCLED"] } };
+      if (user.partnerStatus !== "approved") return res.json({ reports: [] });
+      // By the partner's own id from the JWT – never by name.
+      filter = { assignedPartner: user._id, status: { $in: ["ASSIGNED", "COLLECTING", "COLLECTED", "RECYCLED"] } };
     }
     const status = str(req.query.status, 20).toUpperCase();
     if (admin && WasteReport.STATUSES.includes(status)) filter.status = status;
@@ -92,15 +93,18 @@ module.exports = route({ methods: ["GET", "POST"], auth: true, roles: ["customer
     try { buf = await fraud.readPhoto(p.url); } catch (e) { throw new HttpError(400, "One of the photos could not be found. Please take it again."); }
     if (!(buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff)) throw new HttpError(400, "One of the photos is not valid. Please take it again.");
     try { p.phash = fraud.perceptualHash(buf); } catch (e) { throw new HttpError(400, "One of the photos could not be read. Please take it again."); }
-    p.aiScore = await fraud.aiGeneratedScore(buf);
+    Object.assign(p, await fraud.imageScores(buf));   // aiScore + recaptureScore, one Sightengine call
   }));
 
   const dups = await fraud.findDuplicates(WasteReport, photos.map((p) => p.phash));
-  const scores = photos.map((p) => p.aiScore), known = scores.filter((s) => s != null);
+  // A score that couldn't be computed for any photo counts as "unavailable" (null) for the risk score.
+  const worst = (k) => (photos.some((p) => p[k] == null) ? null : Math.max(...photos.map((p) => p[k])));
+  const best = (k) => { const v = photos.map((p) => p[k]).filter((x) => x != null); return v.length ? Math.max(...v) : null; };
   const signals = {
     gpsAccuracy: Math.max(...photos.map((p) => p.gps.accuracy)),
     distanceM: Math.max(...photos.map((p) => fraud.distanceM(p.gps.lat, p.gps.lng, claimed.lat, claimed.lng))),
-    aiScore: scores.includes(null) ? null : Math.max(...scores),
+    aiScore: worst("aiScore"),
+    recaptureScore: worst("recaptureScore"),
     duplicateOf: dups.length ? dups[0].reportId : null
   };
   const verdict = fraud.score(signals);
@@ -127,7 +131,8 @@ module.exports = route({ methods: ["GET", "POST"], auth: true, roles: ["customer
       gps: first,
       claimed,
       distanceM: signals.distanceM,
-      aiScore: known.length ? Math.max(...known) : null, // highest score we got, even if one photo's check failed
+      aiScore: best("aiScore"),               // highest score we got, even if one photo's check failed
+      recaptureScore: best("recaptureScore"),
       duplicateOf: signals.duplicateOf,
       checkedAt: new Date()
     }

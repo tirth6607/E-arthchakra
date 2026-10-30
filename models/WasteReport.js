@@ -14,7 +14,8 @@ const ACTIONS = {
 };
 
 // Anti-fraud verdict at submit time (lib/fraud.js). Separate from the workflow status above.
-const FRAUD_STATUSES = ["auto-approved", "needs-review", "rejected"];
+// "approved" is only ever set by an admin override.
+const FRAUD_STATUSES = ["auto-approved", "needs-review", "rejected", "approved"];
 // Points a reporter earns once the pickup partner confirms the waste on site.
 const REPORT_POINTS = 10;
 
@@ -32,7 +33,8 @@ const schema = new mongoose.Schema(
       capturedAt: { type: Date, default: null },
       gps: { lat: Number, lng: Number, accuracy: Number },
       phash: { type: String, default: null, index: true }, // 64-bit dHash, hex
-      aiScore: { type: Number, default: null }             // Sightengine: 0–1, likely AI-generated
+      aiScore: { type: Number, default: null },            // Sightengine genai: 0–1, likely AI-generated
+      recaptureScore: { type: Number, default: null }      // Sightengine recapture: 0–1, likely a photo of a screen/print
     }],
     // GeoJSON: coordinates are [longitude, latitude]. No defaults, so old reports stay valid for the 2dsphere index.
     location: { type: { type: String, enum: ["Point"], default: undefined }, coordinates: { type: [Number], default: undefined } },                // storage path, used for cleanup
@@ -43,7 +45,9 @@ const schema = new mongoose.Schema(
     wasteType: { type: String, enum: WASTE_TYPES, required: true },
     description: { type: String, trim: true, maxlength: 500, default: "" },
     status: { type: String, enum: STATUSES, default: "NEW", index: true },
-    collector: { type: String, trim: true, maxlength: 120, default: "" },
+    // The partner (a User with role "partner") this report is assigned to. Access is decided by this id only.
+    assignedPartner: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null, index: true },
+    collector: { type: String, trim: true, maxlength: 120, default: "" }, // display name only, copied at assignment
     history: [{ status: String, by: String, at: { type: Date, default: Date.now }, _id: false }],
     fraud: {
       status: { type: String, enum: FRAUD_STATUSES, default: undefined, index: true },
@@ -53,6 +57,7 @@ const schema = new mongoose.Schema(
       claimed: { lat: Number, lng: Number },                 // where the reporter says the waste is
       distanceM: { type: Number, default: null },            // furthest photo from the claimed point
       aiScore: { type: Number, default: null },              // highest score across photos
+      recaptureScore: { type: Number, default: null },       // highest score across photos
       duplicateOf: { type: mongoose.Schema.Types.ObjectId, ref: "WasteReport", default: null },
       checkedAt: { type: Date, default: null },
       reviewedBy: { type: String, default: "" },
@@ -61,6 +66,19 @@ const schema = new mongoose.Schema(
     // Set by the assigned pickup partner on site; only then are points awarded.
     siteVerifiedAt: { type: Date, default: null },
     siteVerifiedBy: { type: String, default: "" },
+    siteVerifiedByPartner: { type: mongoose.Schema.Types.ObjectId, ref: "User", default: null },
+    // Admin overrides of the auto-check verdict, oldest first.
+    overrides: [{
+      _id: false,
+      by: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+      byName: { type: String, default: "" },
+      at: { type: Date, default: Date.now },
+      from: { type: String, required: true },          // fraud status before
+      to: { type: String, required: true },            // fraud status after
+      statusFrom: String,                              // workflow status before/after
+      statusTo: String,
+      reason: { type: String, required: true, maxlength: 300 }
+    }],
     rewardPoints: { type: Number, default: 0 },
     rewardedAt: { type: Date, default: null },
     // Reserved for the future AI classifier – nothing writes to this yet.
@@ -83,7 +101,7 @@ schema.methods.toClient = function (admin = false) {
     id: String(this._id),
     photoUrl: this.photoUrl,
     photos: this.photos && this.photos.length
-      ? this.photos.map((p) => (admin ? { url: p.url, capturedAt: p.capturedAt, gps: p.gps, aiScore: p.aiScore } : { url: p.url }))
+      ? this.photos.map((p) => (admin ? { url: p.url, capturedAt: p.capturedAt, gps: p.gps, aiScore: p.aiScore, recaptureScore: p.recaptureScore } : { url: p.url }))
       : [{ url: this.photoUrl }],
     location: this.location && this.location.coordinates ? { type: "Point", coordinates: this.location.coordinates } : undefined,
     latitude: this.latitude,
@@ -94,6 +112,8 @@ schema.methods.toClient = function (admin = false) {
     description: this.description,
     status: this.status,
     collector: this.collector,
+    assignedPartner: admin && this.assignedPartner ? String(this.assignedPartner._id || this.assignedPartner) : undefined,
+    overrides: admin ? (this.overrides || []).map((o) => ({ by: String(o.by), byName: o.byName, at: o.at, from: o.from, to: o.to, statusFrom: o.statusFrom, statusTo: o.statusTo, reason: o.reason })) : undefined,
     history: admin ? this.history : undefined,
     reporter: admin && u ? { id: String(u._id), name: u.name, businessName: u.businessName, email: u.email, phone: u.phone } : undefined,
     ai: this.ai,

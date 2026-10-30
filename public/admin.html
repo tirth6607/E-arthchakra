@@ -2035,7 +2035,10 @@ dialog.sr-d{margin:auto;border:0;border-radius:20px;padding:0;width:min(560px,94
 .sr-rc .ph{display:flex;gap:6px;flex-wrap:wrap}.sr-rc .ph img{width:100%;max-height:180px;object-fit:cover;border-radius:10px;cursor:zoom-in}.sr-rc .ph img+img{width:calc(33% - 4px);height:56px}
 .sr-rc ul{margin:8px 0 0;padding-left:18px;font-size:.84rem;color:#9b2c2c}.sr-rc .kv{font-size:.82rem;line-height:1.7}.sr-rc .kv span{color:var(--text-light)}
 .sr-rc .mp{height:170px;border-radius:12px;background:#eef1ef;z-index:0}.sr-rc .lg{font-size:.72rem;color:var(--text-light);margin-top:6px}.sr-rc .lg i{display:inline-block;width:9px;height:9px;border-radius:50%;margin:0 4px 0 8px}
-.sr-score{font-size:1.5rem;font-weight:800}.sr-rc .sr-bt{margin-top:12px}
+.sr-score{font-size:1.5rem;font-weight:800}.sr-f.approved{background:#e3eeff;color:#2455a6}
+.sr-ov form{padding:24px}.sr-ov textarea{width:100%;min-height:90px;margin-top:6px;padding:12px;border:1px solid var(--border);border-radius:12px;font:inherit;font-size:.9rem;resize:vertical}
+.sr-bt select{flex:1;min-width:200px;padding:11px 13px;border:1px solid var(--border);border-radius:10px;background:#fff}
+.sr-ovh{margin:0;padding:0;list-style:none}.sr-ovh li{font-size:.8rem;line-height:1.5;padding:6px 0;border-top:1px dashed var(--border);text-align:right}.sr-ovh li:first-child{border-top:0}.sr-rc .sr-bt{margin-top:12px}
 @media(max-width:900px){.sr-rc{grid-template-columns:1fr}}
 </style>
     <div class="dashboard-page-header"><div>
@@ -2059,6 +2062,14 @@ dialog.sr-d{margin:auto;border:0;border-radius:20px;padding:0;width:min(560px,94
         </table>
     </div>
     <dialog class="sr-d" id="srDlg"><div id="srDlgBody"></div></dialog>
+    <dialog class="sr-d sr-ov" id="srOv"><form method="dialog" id="srOvForm">
+        <h3 id="srOvTitle" style="margin-bottom:6px">Approve report</h3>
+        <p id="srOvSub" style="font-size:.85rem;color:var(--text-light);margin-bottom:12px"></p>
+        <label for="srOvReason" style="font-size:.82rem;font-weight:700">Reason (saved in the report's audit history)</label>
+        <textarea id="srOvReason" maxlength="300" required minlength="5" placeholder="e.g. Checked the photo by phone with the reporter – genuine dump near the market"></textarea>
+        <div id="srOvErr" style="color:#b63a3a;font-size:.82rem;min-height:1.2em;margin-top:6px"></div>
+        <div class="sr-bt"><button type="submit" class="go" id="srOvGo">Approve</button><button type="button" id="srOvCancel">Cancel</button></div>
+    </form></dialog>
 </section>
 
 </main>
@@ -4316,9 +4327,44 @@ setInterval(() => {
   const map = (r) => `https://www.google.com/maps/search/?api=1&query=${r.latitude},${r.longitude}`;
   const approx = (r) => `≈ ${r.latitude.toFixed(3)}, ${r.longitude.toFixed(3)}`;   // ~100 m in the table; exact values are in the details
   let reports = [], queue = [], revMaps = [];
-  const FL = {"auto-approved": "Auto-approved", "needs-review": "Needs review", rejected: "Auto-rejected"};
+  const FL = {"auto-approved": "Auto-approved", "needs-review": "Needs review", rejected: "Rejected", approved: "Admin-approved"};
   const flag = (r) => r.fraud && r.fraud.status ? `<span class="sr-f ${esc(r.fraud.status)}">${FL[r.fraud.status] || esc(r.fraud.status)}</span>` : "";
   const ai = (v) => v == null ? "not available" : `${(v * 100).toFixed(0)}% likely AI`;
+  const rc = (v) => v == null ? "not available" : `${(v * 100).toFixed(0)}% likely a photo of a screen/print`;
+  const pct = (v) => v == null ? "—" : (v * 100).toFixed(0) + "%";
+  // Same rules as OVERRIDES in api/reports/[id].js (the server enforces them; this only decides which buttons to show).
+  const canApprove = (r) => r.fraud && ["rejected", "needs-review"].includes(r.fraud.status) && ["NEW", "REJECTED"].includes(r.status);
+  const canReject = (r) => r.fraud && ["auto-approved", "approved", "needs-review"].includes(r.fraud.status) && ["NEW", "VERIFIED", "ASSIGNED"].includes(r.status) && !r.siteVerifiedAt;
+  const ovButtons = (r) => (canApprove(r) ? `<button type="button" class="go" data-ov="approve" data-id="${r.id}">Approve…</button>` : "")
+    + (canReject(r) ? `<button type="button" class="no" data-ov="reject" data-id="${r.id}">Reject…</button>` : "");
+  const ovHistory = (r) => (r.overrides || []).length ? `<ul class="sr-ovh">${r.overrides.slice().reverse().map((o) => `<li><b>${esc(FL[o.from] || o.from)} → ${esc(FL[o.to] || o.to)}</b> by ${esc(o.byName || o.by)} · ${when(o.at)}<br>“${esc(o.reason)}”</li>`).join("")}</ul>` : "None";
+
+  /* ---------- override modal: reason required, then PATCH { action: "override" } ---------- */
+  let ovTarget = null;
+  function askOverride(id, decision) {
+    const r = reports.find((x) => x.id === id) || queue.find((x) => x.id === id); if (!r) return;
+    ovTarget = {id, decision};
+    $("srOvTitle").textContent = decision === "approve" ? "Approve this report" : "Reject this report";
+    $("srOvSub").textContent = `${r.wasteType} · ${r.reporter ? r.reporter.name : "—"} · currently ${FL[r.fraud.status] || r.fraud.status} / ${r.status}`;
+    $("srOvGo").textContent = decision === "approve" ? "Approve" : "Reject";
+    $("srOvGo").className = decision === "approve" ? "go" : "no";
+    $("srOvReason").value = ""; $("srOvErr").textContent = ""; $("srOvGo").disabled = false;
+    $("srOv").showModal(); $("srOvReason").focus();
+  }
+  $("srOvCancel").onclick = () => $("srOv").close();
+  $("srOvForm").onsubmit = async (e) => {
+    e.preventDefault();
+    const reason = $("srOvReason").value.trim();
+    if (reason.length < 5) { $("srOvErr").textContent = "Please give a short reason (at least 5 characters)."; return; }
+    $("srOvGo").disabled = true;
+    try {
+      const {report} = await EcoAPI.call("/reports/" + ovTarget.id, {method: "PATCH", body: {action: "override", decision: ovTarget.decision, reason}});
+      for (const list of [reports, queue]) { const i = list.findIndex((x) => x.id === report.id); if (i >= 0) list[i] = report; }
+      $("srOv").close(); draw(); loadQueue();
+      if ($("srDlg").open) open(report.id);
+    } catch (err) { $("srOvErr").textContent = err.message; $("srOvGo").disabled = false; }
+  };
+  const wireOverrides = (root) => root.querySelectorAll("[data-ov]").forEach((b) => b.onclick = () => askOverride(b.dataset.id, b.dataset.ov));
   const pt = (p) => p && p.lat != null ? `${p.lat.toFixed(5)}, ${p.lng.toFixed(5)}` : "—";
   const both = (f) => `https://www.google.com/maps/dir/?api=1&origin=${f.gps.lat},${f.gps.lng}&destination=${f.claimed.lat},${f.claimed.lng}`;
 
@@ -4337,10 +4383,10 @@ setInterval(() => {
       <div>
         <div><b>${esc(r.wasteType)}</b> · ${esc(r.reporter ? r.reporter.name : "—")} · ${when(r.createdAt)}</div>
         <div style="display:flex;gap:22px;margin-top:8px"><div><div class="sr-score">${f.riskScore ?? "—"}</div><small>risk score / 100</small></div>
-          <div><div class="sr-score">${f.aiScore == null ? "—" : (f.aiScore * 100).toFixed(0) + "%"}</div><small>AI-generated score</small></div></div>
+          <div><div class="sr-score">${pct(f.aiScore)}</div><small>AI-generated score</small></div>
+          <div><div class="sr-score">${pct(f.recaptureScore)}</div><small>Recapture (screen/print) score</small></div></div>
         <ul>${(f.reasons || []).map((x) => `<li>${esc(x.text)}</li>`).join("") || "<li>No reasons recorded</li>"}</ul>
-        <div class="sr-bt"><button class="go" data-q="verify" data-id="${r.id}">Approve</button><button class="no" data-q="reject" data-id="${r.id}">Reject</button><button data-v="${r.id}">Details</button></div>
-        <div class="sr-qerr" data-err="${r.id}" style="color:#b63a3a;font-size:.82rem;margin-top:6px"></div>
+        <div class="sr-bt">${ovButtons(r)}<button type="button" data-v="${r.id}">Details</button></div>
       </div>
       <div class="kv">
         <div><span>Photo GPS</span> <b>${pt(f.gps)}</b>${f.gps && f.gps.accuracy != null ? ` ±${f.gps.accuracy} m` : ""}</div>
@@ -4364,13 +4410,7 @@ setInterval(() => {
       setTimeout(() => m.invalidateSize(), 100);
     });
     $("srRev").querySelectorAll("[data-v]").forEach((el) => el.onclick = () => open(el.dataset.v));
-    $("srRev").querySelectorAll("[data-q]").forEach((b) => b.onclick = async () => {
-      b.disabled = true;
-      try {
-        await EcoAPI.call("/reports/" + b.dataset.id, {method: "PATCH", body: {action: b.dataset.q}});
-        load();
-      } catch (e) { $("srRev").querySelector(`[data-err="${b.dataset.id}"]`).textContent = e.message; b.disabled = false; }
-    });
+    wireOverrides($("srRev"));
   }
 
   async function load() {
@@ -4387,14 +4427,16 @@ setInterval(() => {
       <td><img class="sr-th" src="${esc(r.photoUrl)}" alt="" data-v="${r.id}" loading="lazy"></td>
       <td><b>${esc(r.wasteType)}</b></td><td>${approx(r)}</td><td>${when(r.createdAt)}</td>
       <td>${esc(r.reporter ? r.reporter.name : "—")}<br><small>${esc(r.reporter ? r.reporter.businessName || r.reporter.email : "")}</small></td>
-      <td><span class="sr-b ${esc(r.status)}">${esc(r.status)}</span>${flag(r)}</td>
+      <td><span class="sr-b ${esc(r.status)}">${esc(r.status)}</span>${flag(r)}${(r.overrides || []).length ? ` <small title="Overridden by an admin">↺</small>` : ""}</td>
       <td><div class="sr-act"><button data-v="${r.id}">View</button><a href="${map(r)}" target="_blank" rel="noopener">View Location</a></div></td></tr>`).join("")
       : `<tr><td colspan="7">No reports yet.</td></tr>`;
     $("srBody").querySelectorAll("[data-v]").forEach((el) => el.onclick = () => open(el.dataset.v));
   }
   function open(id) {
     const r = reports.find((x) => x.id === id) || queue.find((x) => x.id === id); if (!r) return;
-    const A = {NEW: [["verify", "Verify", "go"], ["reject", "Reject", "no"]], VERIFIED: [["reject", "Reject", "no"]], ASSIGNED: [["collecting", "Start collecting"], ["collected", "Mark collected", "go"]],
+    // Auto-checked reports are approved/rejected only through the audited override (with a reason).
+    const legacy = !(r.fraud && r.fraud.status);
+    const A = {NEW: legacy ? [["verify", "Verify", "go"], ["reject", "Reject", "no"]] : [], VERIFIED: legacy ? [["reject", "Reject", "no"]] : [], ASSIGNED: [["collecting", "Start collecting"], ["collected", "Mark collected", "go"]],
       COLLECTING: [["collected", "Mark collected", "go"]], COLLECTED: [["recycled", "Mark recycled", "go"]]}[r.status] || [];
     const assign = r.status === "VERIFIED" || r.status === "ASSIGNED";
     $("srDlgBody").innerHTML = `<div class="sr-gal">${(r.photos && r.photos.length ? r.photos : [{url: r.photoUrl}]).map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt="Reported waste"></a>`).join("")}</div>
@@ -4404,15 +4446,17 @@ setInterval(() => {
         <div><span>Reported</span><b>${when(r.createdAt)}</b></div>
         <div><span>Coordinates</span><b>${r.latitude.toFixed(5)}, ${r.longitude.toFixed(5)}${r.locationAccuracy != null ? " (±" + r.locationAccuracy + " m)" : ""}</b></div>
         <div><span>Collector</span><b>${esc(r.collector || "Not assigned")}</b></div>
-        ${r.fraud && r.fraud.status ? `<div><span>Auto-check</span><b>${flag(r)} risk ${r.fraud.riskScore}/100 · AI ${ai(r.fraud.aiScore)}</b></div>
+        ${r.fraud && r.fraud.status ? `<div><span>Auto-check</span><b>${flag(r)} risk ${r.fraud.riskScore}/100<br>AI ${ai(r.fraud.aiScore)}<br>Recapture ${rc(r.fraud.recaptureScore)}</b></div>
         <div><span>Risk reasons</span><b>${(r.fraud.reasons || []).map((x) => esc(x.text)).join("<br>") || "None"}</b></div>
         <div><span>Photo GPS → claimed</span><b>${pt(r.fraud.gps)} → ${pt(r.fraud.claimed)}<br>${r.fraud.distanceM} m apart · <a href="${both(r.fraud)}" target="_blank" rel="noopener">Open in Maps</a></b></div>
-        ${r.fraud.reviewedAt ? `<div><span>Reviewed</span><b>${esc(r.fraud.reviewedBy)} · ${when(r.fraud.reviewedAt)}</b></div>` : ""}` : ""}
+        ${r.fraud.reviewedAt ? `<div><span>Reviewed</span><b>${esc(r.fraud.reviewedBy)} · ${when(r.fraud.reviewedAt)}</b></div>` : ""}
+        <div><span>Override history</span><b>${ovHistory(r)}</b></div>` : ""}
         <div><span>Partner check</span><b>${r.siteVerifiedAt ? `Confirmed on site by ${esc(r.siteVerifiedBy)} · ${when(r.siteVerifiedAt)}${r.rewardPoints ? ` · +${r.rewardPoints} points` : ""}` : "Not yet confirmed"}</b></div>
         ${r.description ? `<div><span>Notes</span><b>${esc(r.description)}</b></div>` : ""}
         <div><span>History</span><b>${(r.history || []).map((h) => esc(h.status)).join(" → ")}</b></div></div>
       <div class="sr-bt">
-        ${assign ? `<input id="srCol" list="srPartners" placeholder="Partner name (they must match to see it)" value="${esc(r.collector || "")}"><datalist id="srPartners">${partners.map((n) => `<option value="${esc(n)}">`).join("")}</datalist><button class="go" data-a="assign">${r.status === "ASSIGNED" ? "Re-assign" : "Assign collector"}</button>` : ""}
+        ${assign ? `<select id="srPartner" aria-label="Partner"><option value="">${partners.length ? "Choose a partner…" : "No approved partners"}</option>${partners.map((p) => `<option value="${esc(p.id)}" ${p.id === r.assignedPartner ? "selected" : ""}>${esc(p.label)}</option>`).join("")}</select><button class="go" data-a="assign">${r.status === "ASSIGNED" ? "Re-assign" : "Assign partner"}</button>` : ""}
+        ${ovButtons(r)}
         ${A.map(([a, t, c]) => `<button class="${c || ""}" data-a="${a}">${t}</button>`).join("")}
         <button type="button" onclick="window.open('${map(r)}','_blank','noopener')">View Location</button>
         <button type="button" onclick="srDlg.close()">Close</button></div>
@@ -4420,18 +4464,23 @@ setInterval(() => {
     $("srDlgBody").querySelectorAll("[data-a]").forEach((b) => b.onclick = async () => {
       b.disabled = true;
       try {
-        const body = {action: b.dataset.a}; if (b.dataset.a === "assign") body.collector = $("srCol").value.trim();
+        const body = {action: b.dataset.a}; if (b.dataset.a === "assign") body.partnerId = $("srPartner").value;
         const {report} = await EcoAPI.call("/reports/" + r.id, {method: "PATCH", body});
         for (const list of [reports, queue]) { const i = list.findIndex((x) => x.id === r.id); if (i >= 0) list[i] = report; }
         draw(); open(r.id); loadQueue();
       } catch (e) { $("srErr").textContent = e.message; b.disabled = false; }
     });
+    wireOverrides($("srDlgBody"));
     if (!$("srDlg").open) $("srDlg").showModal();
   }
   $("srFilter").onchange = load; $("srRefresh").onclick = load;
   $("srDlg").addEventListener("click", (e) => { if (e.target === $("srDlg")) $("srDlg").close(); });
   let partners = [];
-  const loadPartners = () => EcoAPI.call("/partners").then((d) => { partners = d.partners.filter((p) => p.partnerStatus === "approved" && p.partnerName).map((p) => p.partnerName); }).catch(() => {});
+  // value = the partner's _id; the label is only for the admin to pick the right one.
+  const loadPartners = () => EcoAPI.call("/partners").then((d) => {
+    partners = d.partners.filter((p) => p.partnerStatus === "approved")
+      .map((p) => ({id: p.id, label: `${p.partnerName || p.name} — ${[p.phone, p.city].filter(Boolean).join(" · ") || "no phone/area"}`}));
+  }).catch(() => {});
   document.querySelector('[data-admin-section="scrap"]').addEventListener("click", () => { load(); loadPartners(); });
 })();
 </script>

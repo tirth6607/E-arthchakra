@@ -7,7 +7,8 @@
     "node": ">=20"
   },
   "scripts": {
-    "seed": "node --env-file=.env scripts/seed.js"
+    "seed": "node --env-file=.env scripts/seed.js",
+    "migrate:report-partners": "node --env-file=.env scripts/migrate-report-partners.js"
   },
   "dependencies": {
     "@vercel/blob": "^1.0.0",
