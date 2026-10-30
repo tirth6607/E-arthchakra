@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Verify Code — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link rel="stylesheet" href="style.css">
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+</head>
+
+
+<body class="login-page">
+
+<header class="login-header">
+    <div class="container">
+        <a href="index.html" class="logo"><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+    </div>
+</header>
+
+
+<main class="login-main">
+
+    <div class="login-container">
+
+        <div class="login-card">
+
+            <div class="login-card-header">
+                <h2>Check your email</h2>
+                <p>Enter the 6-digit code sent to your email.</p>
+            </div>
+
+            <div class="login-success show" id="verifyNotice"></div>
+
+            <form id="verifyForm" novalidate>
+
+                <div class="form-group">
+                    <label for="resetCode">Verification code</label>
+                    <input
+                        type="text"
+                        id="resetCode"
+                        class="reset-code-input"
+                        inputmode="numeric"
+                        autocomplete="one-time-code"
+                        maxlength="6"
+                        placeholder="000000"
+                        required
+                    >
+                </div>
+
+                <div class="login-error" id="verifyError"></div>
+
+                <button type="submit" class="btn btn-primary btn-large login-submit">
+                    Verify Code
+                    <span>→</span>
+                </button>
+
+            </form>
+
+            <div class="reset-resend">
+                <button type="button" id="resendButton" disabled>Resend Code</button>
+                <span id="resendTimer"></span>
+            </div>
+
+        </div>
+
+        <a href="forgot-password.html" class="login-back">← Use a different email</a>
+
+    </div>
+
+</main>
+
+
+<script src="api.js"></script>
+
+<script>
+
+const RESEND_SECONDS = 60; // the server enforces this too; the countdown is only a hint
+
+const email = sessionStorage.getItem("earthchakra_reset_email");
+if (!email) window.location.replace("forgot-password.html");
+
+const verifyForm = document.getElementById("verifyForm");
+const verifyError = document.getElementById("verifyError");
+const verifyNotice = document.getElementById("verifyNotice");
+const verifySubmit = verifyForm.querySelector('button[type="submit"]');
+const codeInput = document.getElementById("resetCode");
+const resendButton = document.getElementById("resendButton");
+const resendTimer = document.getElementById("resendTimer");
+
+verifyNotice.textContent =
+    sessionStorage.getItem("earthchakra_reset_notice") ||
+    "If an account exists with this email, a verification code has been sent.";
+
+function showError(message) {
+    verifyError.textContent = message;
+    verifyError.classList.add("show");
+}
+
+codeInput.addEventListener("input", () => {
+    codeInput.value = codeInput.value.replace(/\D/g, "").slice(0, 6);
+});
+
+
+/* ---------- resend countdown ---------- */
+
+let timer = null;
+
+function startCountdown() {
+    clearInterval(timer);
+    const sentAt = Number(sessionStorage.getItem("earthchakra_reset_sent_at")) || Date.now();
+
+    const tick = () => {
+        const left = RESEND_SECONDS - Math.floor((Date.now() - sentAt) / 1000);
+        if (left > 0) {
+            resendButton.disabled = true;
+            resendTimer.textContent = `Resend code in ${left} seconds`;
+        } else {
+            clearInterval(timer);
+            resendButton.disabled = false;
+            resendTimer.textContent = "";
+        }
+    };
+    tick();
+    timer = setInterval(tick, 1000);
+}
+
+startCountdown();
+
+resendButton.addEventListener("click", async () => {
+    resendButton.disabled = true;
+    verifyError.classList.remove("show");
+
+    try {
+        const { message } = await EcoAPI.call("/auth/resend-reset-code", { method: "POST", body: { email } });
+        sessionStorage.setItem("earthchakra_reset_sent_at", String(Date.now()));
+        verifyNotice.textContent = "A new code has been sent. Earlier codes no longer work. " + message;
+        codeInput.value = "";
+        startCountdown();
+    } catch (error) {
+        showError(error.message);
+        resendButton.disabled = false;
+    }
+});
+
+
+/* ---------- verify ---------- */
+
+verifyForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const code = codeInput.value.trim();
+    if (!/^\d{6}$/.test(code)) return showError("Please enter the 6-digit code.");
+
+    verifySubmit.disabled = true;
+
+    try {
+        const { resetToken } = await EcoAPI.call("/auth/verify-reset-code", {
+            method: "POST",
+            body: { email, code }
+        });
+
+        sessionStorage.setItem("earthchakra_reset_token", resetToken);
+        sessionStorage.removeItem("earthchakra_reset_notice");
+        sessionStorage.removeItem("earthchakra_reset_sent_at");
+
+        window.location.href = "reset-password.html";
+
+    } catch (error) {
+        showError(error.message);
+        verifySubmit.disabled = false;
+    }
+});
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# API endpoints
+Disallow: /api/
+
+# Pages that need a login, plus the login/signup flow
+Disallow: /admin.html
+Disallow: /admin-login.html
+Disallow: /dashboard.html
+Disallow: /partner.html
+Disallow: /partner-login.html
+Disallow: /partner-register.html
+Disallow: /report.html
+Disallow: /login.html
+Disallow: /register.html
+Disallow: /forgot-password.html
+Disallow: /reset-password.html
+Disallow: /verify-reset-code.html
+
+Sitemap: https://e-arthchakra.in/sitemap.xml

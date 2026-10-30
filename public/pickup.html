@@ -1,0 +1,1153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Book a Scrap &amp; Waste Pickup — E-arthchakra</title>
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <meta
+        name="description"
+        content="Book a doorstep scrap and waste pickup with E-arthchakra in Ahmedabad, Gandhinagar or Mumbai. Pick your waste types, set your location and schedule a collection."
+    >
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+    <link rel="stylesheet" href="app.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <style>
+    .pk-gps{width:100%;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:var(--off-white);font-weight:700;font-size:.9rem;cursor:pointer;color:var(--text-dark);transition:.2s}
+    .pk-gps:hover{border-color:var(--green-500);background:#fff}.pk-gps:disabled{opacity:.55;cursor:not-allowed}
+    .pk-hint{font-size:.82rem;color:var(--text-light);margin:0 0 10px}
+    .pk-loc{margin-top:12px;padding:14px 16px;border-radius:14px;font-size:.88rem;display:none;line-height:1.6}.pk-loc.ok{display:block;background:#eaf6ec;color:#18532f}.pk-loc.warn{display:block;background:#fff6dd;color:#7a5600}.pk-loc.err{display:block;background:#fdeeee;color:#9b2c2c}
+    .pk-alt{margin-top:10px;width:100%;padding:11px 14px;border-radius:14px;border:1px dashed var(--border);background:transparent;font-weight:700;font-size:.85rem;color:var(--text-medium);cursor:pointer}.pk-alt:hover{border-color:var(--green-500);color:var(--text-dark)}
+    .pk-search{display:none;gap:8px;margin-top:12px}.pk-search.show{display:flex}.pk-search input{flex:1;min-width:0;padding:12px 14px;border:1px solid var(--border);border-radius:12px;font:inherit;font-size:.9rem;background:var(--off-white)}.pk-search button{padding:12px 16px;border-radius:12px;border:0;background:var(--green-800);color:#fff;font-weight:700;cursor:pointer}.pk-search button:disabled{opacity:.55}
+    #pkMap{display:none;height:250px;border-radius:16px;margin-top:12px;z-index:0}.pk-note{font-size:.76rem;color:var(--text-light);margin-top:8px}
+    </style>
+</head>
+
+
+<body class="app-pickup">
+
+
+<!-- =====================================================
+     NAVIGATION
+===================================================== -->
+
+<!-- EC:HEADER -->
+<header class="navbar app-nav">
+    <div class="app-nav-in">
+        <a href="index.html" class="brand" aria-label="E-arthchakra home">
+            <img src="brand-mark.svg" alt="" width="36" height="36">
+            <span class="brand-word"><b>E</b>-arth<i>chakra</i></span>
+        </a>
+        <div class="app-loc-wrap" data-loc>
+            <button class="app-loc" type="button" data-loc-btn aria-haspopup="listbox" aria-expanded="false" aria-label="Choose your city">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                <span data-city-label>Ahmedabad</span>
+                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="app-loc-menu" role="listbox" aria-label="Cities" data-loc-menu hidden>
+                <li role="option" data-city="Ahmedabad">Ahmedabad</li>
+                <li role="option" data-city="Gandhinagar">Gandhinagar</li>
+                <li role="option" data-city="Mumbai">Mumbai</li>
+            </ul>
+        </div>
+        <form class="app-search" role="search" action="index.html#items" data-search-form>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" name="q" data-search placeholder="Search scrap items" autocomplete="off" aria-label="Search scrap items">
+            <div class="app-suggest" data-suggest hidden></div>
+        </form>
+        <nav class="nav-links app-links" aria-label="Main">
+            <a href="solutions.html">For Business</a>
+            <a href="pricing.html">Pricing</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="index.html#items" class="btn app-cta">Book pickup</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu">☰</button>
+        </div>
+    </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="index.html#items">Book a pickup</a>
+    <a href="solutions.html">For Business</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="report.html">Report waste</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#items" class="mobile-cta">Book a pickup</a>
+</div>
+<!-- /EC:HEADER -->
+
+
+<!-- =====================================================
+     MOBILE MENU
+===================================================== -->
+
+
+
+
+<main>
+
+
+<!-- =====================================================
+     PAGE HERO
+===================================================== -->
+
+<section class="pickup-hero">
+
+    <div class="container">
+
+        <div class="pickup-hero-content">
+
+            <div class="eyebrow">
+                PICKUP FOR HOMES &amp; BUSINESSES </div>
+
+            <h1>
+                Your waste.
+                <span>Handled better.</span>
+            </h1>
+
+            <p>Book a pickup for your home or your business. Tell us what you have and we'll collect it, weigh it and send it to the right recyclers.</p>
+
+        </div>
+
+
+        <div class="pickup-process">
+
+            <div class="process-step active">
+
+                <div class="process-number">
+                    01
+                </div>
+
+                <div>
+                    <strong>You</strong> <span>Home or business</span>
+                </div>
+
+            </div>
+
+
+            <div class="process-line"></div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    02
+                </div>
+
+                <div>
+                    <strong>
+                        Waste
+                    </strong>
+
+                    <span>
+                        What you generate
+                    </span>
+                </div>
+
+            </div>
+
+
+            <div class="process-line"></div>
+
+
+            <div class="process-step">
+
+                <div class="process-number">
+                    03
+                </div>
+
+                <div>
+                    <strong>Pickup</strong> <span>We take it from here</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     FORM SECTION
+===================================================== -->
+
+<section class="pickup-section pickup-section-new">
+
+    <div class="container pickup-grid pickup-grid-new">
+
+
+        <!-- =================================================
+             LEFT INFORMATION
+        ================================================== -->
+
+        <div class="pickup-info">
+
+    <div class="eyebrow">
+        WHY E-ARTHCHAKRA
+    </div>
+
+    <h2>One partner for all your waste.</h2>
+
+    <p>No more waiting for the kabadiwala or juggling scrap dealers. E-arthchakra collects, weighs and recycles your waste — whether it's one bag from home or a regular business pickup.</p>
+
+
+    <div class="pickup-feature-list">
+
+
+        <div class="pickup-feature">
+
+            <div class="pickup-feature-icon">
+                ✓
+            </div>
+
+            <div>
+
+                <h3>Pickups that fit you</h3> <p>One-time pickups for homes, regular schedules for businesses.</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pickup-feature">
+
+            <div class="pickup-feature-icon">
+                ♻
+            </div>
+
+            <div>
+
+                <h3>
+                    Multiple waste streams
+                </h3>
+
+                <p>
+                    Cardboard, plastic, paper, metal
+                    and e-waste in one service.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="pickup-feature">
+
+            <div class="pickup-feature-icon">
+                ▤
+            </div>
+
+            <div>
+
+                <h3>Weighed &amp; tracked</h3> <p>Every pickup is weighed and shows up in your dashboard.</p>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="pickup-trust-card">
+
+        <div class="trust-icon">
+            ♻
+        </div>
+
+        <div>
+
+            <strong>Now in Gujarat &amp; Maharashtra</strong>
+
+            <span>Ahmedabad · Gandhinagar · Mumbai</span>
+
+            <small>
+                We're growing our collection network city by city.
+            </small>
+
+        </div>
+
+    </div>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+        ================================================== -->
+
+        <div class="pickup-form-wrapper">
+
+            <div class="form-header">
+
+    <div>
+
+        <span class="form-step">PICKUP REQUEST</span> <h2>Book a pickup</h2>
+
+        <p>
+            Takes less than 2 minutes.
+        </p>
+
+    </div>
+
+            </div>
+
+
+            <form
+                id="pickupForm"
+                class="pickup-form"
+            >
+
+
+                <!-- WHO IS THIS PICKUP FOR -->
+                <fieldset class="pickup-type" id="pickupType">
+                    <legend>I'm booking a pickup for</legend>
+                    <label class="pickup-type-option">
+                        <input type="radio" name="customerType" id="typeHome" value="home" checked>
+                        <span><b aria-hidden="true">🏠</b><strong>My home</strong><small>Household scrap, one-time</small></span>
+                    </label>
+                    <label class="pickup-type-option">
+                        <input type="radio" name="customerType" id="typeBusiness" value="business">
+                        <span><b aria-hidden="true">🏢</b><strong>My business</strong><small>Shop, office, factory…</small></span>
+                    </label>
+                </fieldset>
+
+                <!-- YOUR DETAILS -->
+                <div class="form-section-title">
+                    <span>01</span>
+                    Your details
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="name">
+                            Your name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="name"
+                            name="name"
+                            placeholder="Enter your name"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group business-only"> <label for="businessName">
+                            Business name
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="text"
+                            id="businessName"
+                            name="businessName"
+                            placeholder="Your business name"
+                            required
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="phone">
+                            Phone number
+                            <span>*</span>
+                        </label>
+
+                        <input
+                            type="tel"
+                            id="phone"
+                            name="phone"
+                            placeholder="Enter contact number"
+                            required
+                        >
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="email"> Email </label>
+
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="you@example.com"
+                        >
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="city">
+                            City
+                            <span>*</span>
+                        </label>
+
+                        <select
+                            id="city"
+                            name="city"
+                            required
+                        >
+
+                            <option value="">
+                                Select city
+                            </option>
+
+                            <option value="Ahmedabad">
+                                Ahmedabad
+                            </option>
+
+                            <option value="Gandhinagar">Gandhinagar</option>
+                            <option value="Mumbai">Mumbai</option>
+
+                            <option value="Vadodara">
+                                Vadodara
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group business-only"> <label for="businessType">
+                            Business type
+                            <span>*</span>
+                        </label>
+
+                        <select
+                            id="businessType"
+                            name="businessType"
+                            required
+                        >
+
+                            <option value="">
+                                Select type
+                            </option>
+
+                            <option value="Restaurant">
+                                Restaurant
+                            </option>
+
+                            <option value="Hotel">
+                                Hotel
+                            </option>
+
+                            <option value="Office">
+                                Office
+                            </option>
+
+                            <option value="Retail">
+                                Retail store
+                            </option>
+
+                            <option value="Factory">
+                                Factory
+                            </option>
+
+                            <option value="School">
+                                School / College
+                            </option>
+
+                            <option value="Warehouse">
+                                Warehouse
+                            </option>
+
+                            <option value="Other">
+                                Other
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- WASTE DETAILS -->
+
+                <div class="form-section-title">
+
+                    <span>
+                        02
+                    </span>
+
+                    Waste details
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        What would you like us to collect?
+                        <span>*</span>
+                    </label>
+
+
+                    <div class="checkbox-grid">
+
+
+                        <label class="checkbox-card">
+
+                            <input
+                                type="checkbox"
+                                name="waste"
+                                value="Cardboard"
+                            >
+
+                            <span class="checkbox-content">
+
+                                <strong>
+                                    Cardboard
+                                </strong>
+
+                                <small>
+                                    Packaging
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="checkbox-card">
+
+                            <input
+                                type="checkbox"
+                                name="waste"
+                                value="Plastic"
+                            >
+
+                            <span class="checkbox-content">
+
+                                <strong>
+                                    Plastic
+                                </strong>
+
+                                <small> Bottles &amp; containers </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="checkbox-card">
+
+                            <input
+                                type="checkbox"
+                                name="waste"
+                                value="Paper"
+                            >
+
+                            <span class="checkbox-content">
+
+                                <strong>
+                                    Paper
+                                </strong>
+
+                                <small> Newspaper, office, packaging </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="checkbox-card">
+
+                            <input
+                                type="checkbox"
+                                name="waste"
+                                value="Metal"
+                            >
+
+                            <span class="checkbox-content">
+
+                                <strong>
+                                    Metal
+                                </strong>
+
+                                <small>
+                                    Scrap & recyclable
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                        <label class="checkbox-card">
+
+                            <input
+                                type="checkbox"
+                                name="waste"
+                                value="E-waste"
+                            >
+
+                            <span class="checkbox-content">
+
+                                <strong>
+                                    E-waste
+                                </strong>
+
+                                <small>
+                                    Electronics
+                                </small>
+
+                            </span>
+
+                        </label>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-row">
+
+
+                    <div class="form-group">
+
+                        <label for="quantity"> Approximate quantity </label>
+
+                        <select
+                            id="quantity"
+                            name="quantity"
+                        >
+
+                            <option value=""> Select quantity </option>
+                            <option value="Under 10 kg">Under 10 kg</option>
+                            <option value="10-50 kg">10–50 kg</option>
+
+                            <option value="Under 50 kg">
+                                Under 50 kg / month
+                            </option>
+
+                            <option value="50-200 kg">
+                                50–200 kg / month
+                            </option>
+
+                            <option value="200-500 kg">
+                                200–500 kg / month
+                            </option>
+
+                            <option value="500-1000 kg">
+                                500–1,000 kg / month
+                            </option>
+
+                            <option value="1000+ kg">
+                                1,000+ kg / month
+                            </option>
+
+                            <option value="Not sure">
+                                I'm not sure
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                    <div class="form-group">
+
+                        <label for="frequency"> How often? </label>
+
+                        <select
+                            id="frequency"
+                            name="frequency"
+                        >
+
+                            <option value=""> Select frequency </option>
+                            <option value="One-time">One-time pickup</option>
+
+                            <option value="Daily">
+                                Daily
+                            </option>
+
+                            <option value="2-3 times a week">
+                                2–3 times a week
+                            </option>
+
+                            <option value="Weekly">
+                                Weekly
+                            </option>
+
+                            <option value="Biweekly">
+                                Every 2 weeks
+                            </option>
+
+                            <option value="Monthly">
+                                Monthly
+                            </option>
+
+                            <option value="Flexible">
+                                Flexible
+                            </option>
+
+                        </select>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- EXACT LOCATION -->
+
+                <div class="form-group">
+
+                    <label>
+                        Pickup location <span>*</span>
+                    </label>
+
+                    <p class="pk-hint">Stand at the pickup spot and tap the button so our collector can reach you exactly. We only ask when you tap it. Not there right now, or location is blocked? Set the spot on the map instead.</p>
+
+                    <button type="button" class="pk-gps" id="pkGps">📍 Use My Current Location</button>
+                    <button type="button" class="pk-alt" id="pkManual">🗺 Set the location on the map instead</button>
+                    <div class="pk-search" id="pkSearch">
+                        <input type="search" id="pkAddress" placeholder="Search your address, society or landmark" autocomplete="off" aria-label="Search address">
+                        <button type="button" id="pkFind">Find</button>
+                    </div>
+                    <div class="pk-loc" id="pkLoc" role="status"></div>
+                    <div id="pkMap" aria-label="Map preview"></div>
+                    <p class="pk-note" id="pkMapNote" style="display:none">Drag the pin or tap the map to move it — the pin position is what we save.</p>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="form-group">
+
+                    <label for="message">
+                        Anything else we should know?
+                    </label>
+
+                    <textarea
+                        id="message"
+                        name="message"
+                        rows="4"
+                        placeholder="Address details, best time to visit, or anything else we should know…"
+                    ></textarea>
+
+                </div>
+
+
+                <!-- SUBMIT -->
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-large form-submit"
+                >
+
+                    Request Pickup
+
+                    <span>
+                        →
+                    </span>
+
+                </button>
+
+
+                <p class="form-disclaimer">
+                    By submitting this form, you agree that our
+                    team may contact you regarding your request.
+                </p>
+
+
+            </form>
+
+
+            <!-- SUCCESS STATE -->
+
+            <div
+                class="form-success"
+                id="formSuccess"
+            >
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h2>
+                    Request received.
+                </h2>
+
+                <p>Thanks! Our team will confirm your pickup time and contact you shortly.</p>
+
+                <a
+                    href="index.html"
+                    class="btn btn-primary"
+                >
+                    Back to Home
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     BOTTOM CTA
+===================================================== -->
+
+<section class="pickup-bottom-cta">
+
+    <div class="container">
+
+        <div class="pickup-bottom-box">
+
+            <div>
+
+                <div class="eyebrow">
+                    HAVE QUESTIONS?
+                </div>
+
+                <h2>
+                    Prefer to talk first?
+                </h2>
+
+            </div>
+
+            <a
+                href="contact.html"
+                class="btn btn-white"
+            >
+                Contact Us →
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+
+<!-- =====================================================
+     FOOTER
+===================================================== -->
+
+<!-- EC:FOOTER -->
+<footer class="app-footer">
+    <div class="app-foot-in">
+        <div class="app-foot-top">
+            <a href="index.html" class="brand" aria-label="E-arthchakra home">
+                <img src="brand-mark.svg" alt="" width="36" height="36">
+                <span class="brand-word"><b>E</b>-arth<i>chakra</i></span>
+            </a>
+            <div class="app-foot-right">
+            <a class="app-insta" href="https://www.instagram.com/e_arthchakra.official/" target="_blank" rel="noopener" aria-label="E-arthchakra on Instagram (opens in a new tab)">
+                <span class="app-insta-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5.5"/><circle cx="12" cy="12" r="4.2"/><circle cx="17.4" cy="6.6" r="1.1" class="dot"/></svg></span>
+                <span class="app-insta-txt"><small>Follow us</small>@e_arthchakra.official</span>
+            </a>
+            <label class="app-foot-city">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                <select data-city-select aria-label="Your city"><option>Ahmedabad</option><option>Gandhinagar</option><option>Mumbai</option></select>
+            </label>
+            </div>
+        </div>
+        <div class="app-foot-cols">
+            <div>
+                <h4>Services</h4>
+                <a href="index.html#items">Home pickup</a>
+                <a href="pickup.html?type=business">Business pickup</a>
+                <a href="report.html">Report waste</a>
+                <a href="pricing.html">Business pricing</a>
+            </div>
+            <div>
+                <h4>Company</h4>
+                <a href="solutions.html">For Business</a>
+                <a href="contact.html">Contact us</a>
+                <a href="contact.html">Become a partner</a>
+            </div>
+            <div>
+                <h4>Cities</h4>
+                <a href="index.html#items" data-set-city="Ahmedabad">Ahmedabad</a>
+                <a href="index.html#items" data-set-city="Gandhinagar">Gandhinagar</a>
+                <a href="index.html#items" data-set-city="Mumbai">Mumbai</a>
+            </div>
+            <div>
+                <h4>Account</h4>
+                <a href="login.html">Login</a>
+                <a href="register.html">Create account</a>
+                <a href="dashboard.html">My pickups</a>
+                <a href="partner-login.html">Partner login</a>
+            </div>
+        </div>
+        <div class="app-foot-bottom">
+            <p>© <span data-year>2026</span> E-arthchakra. Scrap &amp; waste pickup for homes and businesses.</p>
+            <p>Ahmedabad · Gandhinagar · Mumbai</p>
+        </div>
+    </div>
+</footer>
+<!-- /EC:FOOTER -->
+
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+<script src="api.js"></script>
+
+
+<!-- =====================================================
+     PICKUP FORM JAVASCRIPT (FRONTEND / LOCALSTORAGE)
+===================================================== -->
+<script>
+(() => {
+    const pickupForm = document.getElementById("pickupForm");
+    const formSuccess = document.getElementById("formSuccess");
+
+    /* ---------- home vs business ---------- */
+    const typeInputs = document.querySelectorAll('input[name="customerType"]');
+    const businessOnly = document.querySelectorAll(".business-only");
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("type") === "business") document.getElementById("typeBusiness").checked = true;
+
+    function applyType() {
+        const isBusiness = document.getElementById("typeBusiness").checked;
+        businessOnly.forEach((group) => {
+            group.hidden = !isBusiness;
+            group.querySelectorAll("input, select").forEach((field) => { field.required = isBusiness; });
+        });
+        const frequency = document.getElementById("frequency");
+        if (frequency && !frequency.value && !isBusiness) frequency.value = "One-time";
+    }
+    typeInputs.forEach((input) => input.addEventListener("change", applyType));
+    applyType();
+
+    if (!pickupForm) return;
+
+    /* ---------- exact pickup location (GPS + draggable pin) ---------- */
+    const GOOD_ACCURACY = 100; // metres, same threshold as report.html
+    const CITY_CENTRES = { Ahmedabad: [23.0225, 72.5714], Gandhinagar: [23.2156, 72.6369], Mumbai: [19.0760, 72.8777] };
+    const gpsButton = document.getElementById("pkGps");
+    const manualButton = document.getElementById("pkManual");
+    const searchRow = document.getElementById("pkSearch");
+    const addressInput = document.getElementById("pkAddress");
+    const findButton = document.getElementById("pkFind");
+    const locBox = document.getElementById("pkLoc");
+    // gps.source: "gps" (device fix), "gps-adjusted" (fix, then pin moved), "manual" (placed on the map by hand)
+    let gps = null, map = null, marker = null;
+
+    function movePin(lat, lng) {
+        gps.latitude = lat; gps.longitude = lng; gps.placed = true;
+        if (gps.source === "gps") gps.source = "gps-adjusted";
+        paintLoc();
+    }
+
+    function paintLoc() {
+        if (gps.source === "manual") {
+            locBox.className = "pk-loc ok";
+            locBox.innerHTML = `Pin placed on the map ✓<br>Latitude: ${gps.latitude.toFixed(6)}<br>Longitude: ${gps.longitude.toFixed(6)}<br>Zoom in and make sure the pin is on your gate or building.`;
+            return;
+        }
+        const low = gps.locationAccuracy > GOOD_ACCURACY;
+        locBox.className = "pk-loc " + (low ? "warn" : "ok");
+        locBox.innerHTML = `${low ? "⚠ " : ""}Location captured ✓<br>Latitude: ${gps.latitude.toFixed(6)}<br>Longitude: ${gps.longitude.toFixed(6)}<br>Accuracy: ${Math.round(gps.locationAccuracy)} meters${gps.source === "gps-adjusted" ? "<br>Pin moved by you" : ""}`
+            + (low ? "<br><b>Your location accuracy is low. Move to an open area and tap the button again, or drag the pin to the exact spot.</b>" : "");
+    }
+    function showMap(zoom = 17) {
+        if (typeof L === "undefined") return; // map is optional; GPS still works
+        document.getElementById("pkMap").style.display = "block";
+        document.getElementById("pkMapNote").style.display = "block";
+        if (!map) {
+            map = L.map("pkMap").setView([gps.latitude, gps.longitude], zoom);
+            L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19, attribution: "© OpenStreetMap" }).addTo(map);
+            marker = L.marker([gps.latitude, gps.longitude], { draggable: true }).addTo(map);
+            marker.on("dragend", () => { const p = marker.getLatLng(); movePin(p.lat, p.lng); });
+            map.on("click", (e) => { marker.setLatLng(e.latlng); movePin(e.latlng.lat, e.latlng.lng); });
+        } else { map.setView([gps.latitude, gps.longitude], zoom); marker.setLatLng([gps.latitude, gps.longitude]); }
+        setTimeout(() => map.invalidateSize(), 80);
+    }
+    function resetLocation() {
+        gps = null; locBox.className = "pk-loc"; locBox.textContent = "";
+        document.getElementById("pkMap").style.display = "none";
+        document.getElementById("pkMapNote").style.display = "none";
+        gpsButton.textContent = "📍 Use My Current Location";
+        searchRow.classList.remove("show"); addressInput.value = "";
+    }
+
+    function startManual() {
+        if (typeof L === "undefined") {
+            locBox.className = "pk-loc err";
+            locBox.textContent = "The map couldn't load. Check your internet connection and refresh the page.";
+            return;
+        }
+        searchRow.classList.add("show");
+        if (gps && gps.source === "manual") return;
+        if (gps) { addressInput.focus(); return; } // already have a fix: just let them search or move the pin
+        const centre = CITY_CENTRES[document.getElementById("city").value] || CITY_CENTRES.Ahmedabad;
+        gps = { latitude: centre[0], longitude: centre[1], locationAccuracy: null, locationTimestamp: null, source: "manual" };
+        showMap(13);
+        locBox.className = "pk-loc warn";
+        locBox.textContent = "Search your address above, or tap the map / drag the pin to your exact pickup spot.";
+        gps.placed = false; // the city centre is only a starting point
+        addressInput.focus();
+    }
+
+    async function findAddress() {
+        const q = addressInput.value.trim();
+        if (!q) return addressInput.focus();
+        const city = document.getElementById("city").value;
+        findButton.disabled = true; findButton.textContent = "…";
+        try {
+            const url = "https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=in&q="
+                + encodeURIComponent(city && !q.toLowerCase().includes(city.toLowerCase()) ? `${q}, ${city}` : q);
+            const results = await (await fetch(url, { headers: { "Accept-Language": "en" } })).json();
+            if (!results.length) {
+                locBox.className = "pk-loc err";
+                locBox.textContent = "We couldn't find that address. Try a nearby landmark, or tap the map to place the pin.";
+                return;
+            }
+            gps.latitude = Number(results[0].lat); gps.longitude = Number(results[0].lon); gps.placed = true;
+            gps.source = "manual"; gps.locationAccuracy = null; gps.locationTimestamp = null; // a searched address is not a GPS fix
+            showMap(17); paintLoc();
+        } catch (e) {
+            locBox.className = "pk-loc err";
+            locBox.textContent = "Address search isn't working right now. Tap the map to place the pin instead.";
+        } finally {
+            findButton.disabled = false; findButton.textContent = "Find";
+        }
+    }
+
+    manualButton.addEventListener("click", startManual);
+    findButton.addEventListener("click", findAddress);
+    addressInput.addEventListener("keydown", (e) => { if (e.key === "Enter") { e.preventDefault(); findAddress(); } });
+    gpsButton.addEventListener("click", () => {
+        const err = (t) => { locBox.className = "pk-loc err"; locBox.textContent = t; };
+        if (!("geolocation" in navigator)) return err("This browser can't share your location. Try Chrome or Safari.");
+        gpsButton.disabled = true; gpsButton.textContent = "Getting your location..."; locBox.className = "pk-loc";
+        navigator.geolocation.getCurrentPosition((p) => {
+            gpsButton.disabled = false; gpsButton.textContent = "📍 Use My Current Location again";
+            gps = { latitude: p.coords.latitude, longitude: p.coords.longitude, locationAccuracy: p.coords.accuracy, locationTimestamp: p.timestamp || Date.now(), source: "gps", placed: true };
+            searchRow.classList.remove("show");
+            paintLoc(); showMap();
+        }, (e) => {
+            gpsButton.disabled = false; gpsButton.textContent = "📍 Try again";
+            if (gps && gps.source !== "manual") gps = null;
+            err((e.code === 1 ? "Location permission was denied. Enable it in your browser settings and tap “Try again”"
+                : e.code === 3 ? "Getting your location took too long. Try again, ideally outdoors"
+                : "Unable to determine your location. Try again")
+                + " — or tap “Set the location on the map instead”.");
+        }, { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 });
+    });
+
+    pickupForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const user = JSON.parse(localStorage.getItem("earthchakra_user") || "null");
+        if (!user || !user.loggedIn) {
+            alert("Please login before requesting a pickup.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        const selectedWaste = [...document.querySelectorAll('input[name="waste"]:checked')];
+        if (!selectedWaste.length) {
+            alert("Please select at least one waste category.");
+            return;
+        }
+
+        if (!gps || !gps.placed) {
+            alert(gps ? "Please search your address or tap the map to place the pin on your exact pickup spot."
+                : "Please tap “Use My Current Location” or set the location on the map so we know exactly where to pick up.");
+            gpsButton.scrollIntoView({ behavior: "smooth", block: "center" });
+            return;
+        }
+
+        const formData = new FormData(pickupForm);
+        const submitButton = pickupForm.querySelector('button[type="submit"]');
+        if (submitButton) submitButton.disabled = true;
+
+        try {
+            await EcoAPI.createPickup({
+                businessName: document.getElementById("typeBusiness").checked ? formData.get("businessName") : "Home pickup",
+                name: formData.get("name"),
+                phone: formData.get("phone"),
+                email: formData.get("email"),
+                city: formData.get("city"),
+                businessType: document.getElementById("typeBusiness").checked ? formData.get("businessType") : "Household",
+                waste: selectedWaste.map(item => item.value),
+                quantity: formData.get("quantity"),
+                frequency: formData.get("frequency"),
+                message: formData.get("message"),
+                latitude: gps.latitude,
+                longitude: gps.longitude,
+                locationAccuracy: gps.locationAccuracy,
+                locationTimestamp: gps.locationTimestamp,
+                locationSource: gps.source
+            });
+
+            pickupForm.reset(); applyType(); resetLocation();
+            pickupForm.style.display = "none";
+            if (formSuccess) formSuccess.classList.add("show");
+
+        } catch (error) {
+            alert(error.message);
+            if (submitButton) submitButton.disabled = false;
+        }
+    });
+})();
+</script>
+
+
+<script src="nav-auth.js"></script>
+
+<script src="brand.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Login — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <meta name="description" content="Sign in to book scrap pickups and track your recycling with E-arthchakra.">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+</head>
+
+
+<body class="login-page">
+
+
+<!-- =====================================================
+     LOGIN HEADER
+===================================================== -->
+
+<header class="login-header">
+
+    <div class="container">
+
+        <a
+            href="index.html"
+            class="logo"
+        ><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     LOGIN
+===================================================== -->
+
+<main class="login-main">
+
+    <div class="login-container">
+
+
+        <!-- BRAND INTRO -->
+
+        <div class="login-intro">
+
+            <div class="eyebrow">WELCOME BACK</div>
+
+            <h1>Welcome back.</h1>
+
+            <p>Book pickups, track your scrap and see your reports — all in one place.</p>
+
+        </div>
+
+
+        <!-- LOGIN CARD -->
+
+        <div class="login-card">
+
+
+            <div class="login-card-header">
+
+                <h2>
+                    Sign in
+                </h2>
+
+                <p>Sign in to your E-arthchakra account.</p>
+
+            </div>
+
+
+            <form id="loginForm">
+
+
+                <div class="form-group">
+
+                    <label for="loginEmail">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="loginEmail"
+                        placeholder="you@company.com"
+                        autocomplete="email"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <div class="password-label">
+
+                        <label for="loginPassword">
+                            Password
+                        </label>
+
+                        <a href="forgot-password.html">
+                            Forgot password?
+                        </a>
+
+                    </div>
+
+
+                    <div class="password-input">
+
+                        <input
+                            type="password"
+                            id="loginPassword"
+                            placeholder="Enter your password"
+                            autocomplete="current-password"
+                            required
+                        >
+
+                        <button
+                            type="button"
+                            id="togglePassword"
+                            aria-label="Show password"
+                        >
+                            Show
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="login-error"
+                    id="loginError"
+                >
+                    Please enter your email and password.
+                </div>
+
+
+                <button
+                    type="submit"
+                    class="btn btn-primary btn-large login-submit"
+                >
+                    Sign In
+                    <span>→</span>
+                </button>
+
+
+            </form>
+
+
+            <div class="login-divider"><span>OR</span></div>
+            <a href="register.html" class="btn btn-secondary login-request">Create an account</a>
+            <p class="login-terms">
+                By continuing, you agree to E-arthchakra's
+                terms of service and privacy policy.
+            </p>
+
+        </div>
+
+
+        <!-- BACK -->
+
+        <p class="login-alt">Collection partner? <a href="partner-login.html">Partner login →</a></p>
+
+        <a
+            href="index.html"
+            class="login-back"
+        >
+            ← Back to website
+        </a>
+
+
+    </div>
+
+</main>
+
+
+<script src="api.js"></script>
+
+<script>
+
+    /*
+     * Current selected role.
+     */
+
+    const selectedRole = "customer";   // this page only signs in customer accounts
+
+
+    
+
+    /*
+     * Show / hide password.
+     */
+
+    const passwordInput =
+        document.getElementById("loginPassword");
+
+    const togglePassword =
+        document.getElementById("togglePassword");
+
+
+    togglePassword.addEventListener(
+        "click",
+        () => {
+
+            if (
+                passwordInput.type === "password"
+            ) {
+
+                passwordInput.type = "text";
+
+                togglePassword.textContent =
+                    "Hide";
+
+            } else {
+
+                passwordInput.type = "password";
+
+                togglePassword.textContent =
+                    "Show";
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Login form.
+     *
+     * This is DEMO authentication only.
+     * Real authentication will be added
+     * when we connect a backend.
+     */
+
+// ================================
+// LOGIN (talks to /api/auth/login)
+// ================================
+
+const loginForm = document.getElementById("loginForm");
+const loginError = document.getElementById("loginError");
+const loginSubmit = loginForm.querySelector('button[type="submit"]');
+
+loginForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    const email = document.getElementById("loginEmail").value.trim();
+    const password = passwordInput.value;
+
+    if (!email || !password) {
+        loginError.textContent = "Please enter your email and password.";
+        loginError.classList.add("show");
+        return;
+    }
+
+    loginSubmit.disabled = true;
+
+    try {
+        // The selected tab must match the account's real role (checked on the server).
+        const user = await EcoAPI.login(email, password, selectedRole);
+
+        loginError.classList.remove("show");
+
+        const destination = {
+            admin: "admin.html",
+            partner: "partner.html"
+        }[user.role] || "dashboard.html";
+
+        window.location.href = destination;
+
+    } catch (error) {
+        loginError.textContent = /is not a \w+ account/i.test(error.message) ? "This login is for customers. Partners can sign in on the Partner login page." : error.message;
+        loginError.classList.add("show");
+        loginSubmit.disabled = false;
+    }
+});
+
+
+</script>
+
+
+</body>
+
+</html>

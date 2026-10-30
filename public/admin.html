@@ -1,0 +1,4360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Admin Dashboard — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+</head>
+
+
+<body class="app-page admin-page">
+
+
+<!-- =====================================================
+     ADMIN SIDEBAR
+===================================================== -->
+
+<aside class="sidebar" id="adminSidebar">
+
+    <div class="sidebar-logo">
+
+        <a
+            href="index.html"
+            class="logo"
+        ><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+
+    </div>
+
+
+    <nav class="dashboard-nav">
+
+        <div class="dashboard-nav-label">
+            OPERATIONS
+        </div>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link active"
+            data-admin-section="overview"
+        >
+            <span>▦</span>
+            Overview
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="customers"
+        >
+            <span>♙</span>
+            Customers
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="pickups"
+        >
+            <span>↗</span>
+            Pickups
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="scrap"
+        >
+            <span>📷</span>
+            Scrap Reports
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="waste"
+        >
+            <span>♻</span>
+            Waste
+        </a>
+
+
+        <div class="dashboard-nav-label">
+            NETWORK
+        </div>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="collection-partners"
+        >
+            <span>◇</span>
+            Collection Partners
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="recycling-partners"
+        >
+            <span>◎</span>
+            Recycling Partners
+        </a>
+
+
+        <div class="dashboard-nav-label">
+            MANAGEMENT
+        </div>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="reports"
+        >
+            <span>▤</span>
+            Reports
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-admin-section="settings"
+        >
+            <span>⚙</span>
+            Settings
+        </a>
+
+    </nav>
+
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar">
+                AD
+            </div>
+
+            <div>
+
+                <strong>
+                    E-arthchakra Admin
+                </strong>
+
+                <span>
+                    Administrator
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout-button"
+            id="adminLogout"
+        >
+            Log out
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MOBILE OVERLAY
+===================================================== -->
+
+<div
+    class="sidebar-overlay"
+    id="adminOverlay"
+></div>
+
+
+<!-- =====================================================
+     MAIN APPLICATION
+===================================================== -->
+
+<div class="app-main">
+
+
+<header class="app-header">
+
+    <button
+        class="dashboard-menu-button"
+        id="adminMenuButton"
+    >
+        ☰
+    </button>
+
+
+    <div class="app-header-right">
+
+        <button
+            class="notification-button"
+            title="Notifications"
+        >
+            ◌
+            <span></span>
+        </button>
+
+
+        <div class="header-business">
+
+            <div class="user-avatar small">
+                AD
+            </div>
+
+            <div>
+
+                <strong>
+                    E-arthchakra Admin
+                </strong>
+
+                <small>
+                    Administrator
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<main class="dashboard-content">
+
+
+<!-- =====================================================
+     OVERVIEW
+===================================================== -->
+
+<section
+    class="dashboard-section active"
+    id="admin-overview"
+>
+
+
+    <div class="dashboard-welcome">
+
+        <div>
+
+            <span class="dashboard-date">
+                ADMINISTRATION
+            </span>
+
+            <h1>
+                Operations overview.
+            </h1>
+
+            <p>
+                Here's what's happening across your waste network.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            id="adminQuickPickup"
+        >
+            + Create Pickup
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         KPI CARDS
+    ================================================== -->
+
+    <div class="dashboard-stat-grid">
+
+
+       <div class="dashboard-stat-card">
+
+    <div class="stat-card-top">
+
+        <span>
+            ACTIVE CUSTOMERS
+        </span>
+
+        <div class="stat-icon">
+            ♙
+        </div>
+
+    </div>
+
+    <strong id="adminActiveCustomers">
+        0
+    </strong>
+
+    <small>
+        businesses
+    </small>
+
+    <div
+        class="stat-change positive"
+        id="adminCustomerChange"
+    >
+        —
+    </div>
+
+</div>
+
+        <div class="dashboard-stat-card">
+
+    <div class="stat-card-top">
+
+        <span>
+            PICKUP REQUESTS
+        </span>
+
+        <div class="stat-icon">
+            ♻
+        </div>
+
+    </div>
+
+    <strong id="adminTotalRequests">
+        0
+    </strong>
+
+    <small>
+        total requests
+    </small>
+
+    <div
+        class="stat-change neutral"
+        id="adminRequestChange"
+    >
+        Live data
+    </div>
+
+</div>
+
+
+        <div class="dashboard-stat-card">
+
+    <div class="stat-card-top">
+
+        <span>
+            COMPLETED PICKUPS
+        </span>
+
+        <div class="stat-icon">
+            ✓
+        </div>
+
+    </div>
+
+    <strong id="adminCompletedPickups">
+        0
+    </strong>
+
+    <small>
+        completed requests
+    </small>
+
+    <div
+        class="stat-change positive"
+        id="adminCompletionRate"
+    >
+        0% completion rate
+    </div>
+
+</div>
+
+
+        <div class="dashboard-stat-card">
+
+    <div class="stat-card-top">
+
+        <span>
+            NETWORK PARTNERS
+        </span>
+
+        <div class="stat-icon">
+            ◇
+        </div>
+
+    </div>
+
+    <strong id="adminPartnerCount">
+        0
+    </strong>
+
+    <small>
+        approved partners
+    </small>
+
+    <div
+        class="stat-change neutral"
+        id="adminPartnerPending"
+    >
+        Currently available
+    </div>
+
+</div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         OPERATIONS GRID
+    ================================================== -->
+
+    <div class="dashboard-main-grid">
+
+
+        <!-- PICKUP QUEUE -->
+
+        <div class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        OPERATIONS
+                    </span>
+
+                    <h2>
+                        Pickup queue
+                    </h2>
+
+                </div>
+
+                <a
+                    href="#"
+                    data-admin-link="pickups"
+                >
+                    View all
+                </a>
+
+            </div>
+
+
+            <div
+    class="admin-queue"
+    id="adminOverviewQueue"
+>
+
+    <div
+        class="admin-queue-empty"
+        style="
+            padding:30px 0;
+            text-align:center;
+            color:#8a958c;
+            font-size:.62rem;
+        "
+    >
+        No pickup requests yet.
+    </div>
+
+</div>
+
+        </div>
+
+
+        <!-- RECYCLING NETWORK -->
+
+        <div class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        NETWORK
+                    </span>
+
+                    <h2>
+                        Material routing
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="routing-list">
+
+
+                <div class="routing-row">
+
+                    <div>
+                        <strong>
+                            Cardboard
+                        </strong>
+
+                        <span>
+                            10.4T
+                        </span>
+                    </div>
+
+                    <div class="routing-bar">
+                        <div
+                            style="width: 82%"
+                        ></div>
+                    </div>
+
+                    <small>
+                        82%
+                    </small>
+
+                </div>
+
+
+                <div class="routing-row">
+
+                    <div>
+                        <strong>
+                            Plastic
+                        </strong>
+
+                        <span>
+                            5.7T
+                        </span>
+                    </div>
+
+                    <div class="routing-bar">
+                        <div
+                            style="width: 63%"
+                        ></div>
+                    </div>
+
+                    <small>
+                        63%
+                    </small>
+
+                </div>
+
+
+                <div class="routing-row">
+
+                    <div>
+                        <strong>
+                            Metal
+                        </strong>
+
+                        <span>
+                            4.2T
+                        </span>
+                    </div>
+
+                    <div class="routing-bar">
+                        <div
+                            style="width: 51%"
+                        ></div>
+                    </div>
+
+                    <small>
+                        51%
+                    </small>
+
+                </div>
+
+
+                <div class="routing-row">
+
+                    <div>
+                        <strong>
+                            E-waste
+                        </strong>
+
+                        <span>
+                            2.1T
+                        </span>
+                    </div>
+
+                    <div class="routing-bar">
+                        <div
+                            style="width: 34%"
+                        ></div>
+                    </div>
+
+                    <small>
+                        34%
+                    </small>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         RECENT CUSTOMERS
+    ================================================== -->
+
+    <div class="dashboard-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <span class="panel-label">
+                    CUSTOMERS
+                </span>
+
+                <h2>
+                    Recently onboarded
+                </h2>
+
+            </div>
+
+            <a
+                href="#"
+                data-admin-link="customers"
+            >
+                View customers
+            </a>
+
+        </div>
+
+
+        <div class="activity-table-wrapper">
+
+            <table class="activity-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            DATE
+                        </th>
+
+                        <th>
+                            CUSTOMER
+                        </th>
+
+                        <th>
+                            MATERIAL
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            PARTNER
+                        </th>
+
+                        <th>
+                            SCHEDULE
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                    </tr>
+
+            </thead>
+
+
+                <tbody id="adminRecentCustomers">
+
+    <tr>
+
+        <td
+            colspan="5"
+            style="
+                text-align:center;
+                padding:35px;
+                color:#8a958c;
+            "
+        >
+
+            No customers yet.
+
+        </td>
+
+    </tr>
+
+</tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     CUSTOMERS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-customers"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                CUSTOMER MANAGEMENT
+            </span>
+
+            <h1>
+                Customers
+            </h1>
+
+            <p>
+                Manage businesses using the E-arthchakra platform.
+            </p>
+
+        </div>
+
+        <button class="btn btn-primary">
+            + Add Customer
+        </button>
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+        <div class="admin-search-row">
+
+            <input
+                type="search"
+                id="customerSearch"
+                placeholder="Search businesses..."
+            >
+
+            <select id="customerFilter">
+
+                <option value="all">
+                    All customers
+                </option>
+
+                <option value="active">
+                    Active
+                </option>
+
+                <option value="pending">
+                    Pending
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="activity-table-wrapper">
+
+            <table
+                class="activity-table"
+                id="customersTable"
+            >
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            BUSINESS
+                        </th>
+
+                        <th>
+                            CONTACT
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            PLAN
+                        </th>
+
+                        <th>
+                            MONTHLY VALUE
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            Green Leaf Restaurant
+                        </td>
+
+                        <td>
+                            Rahul Shah
+                        </td>
+
+                        <td>
+                            Ahmedabad
+                        </td>
+
+                        <td>
+                            Business
+                        </td>
+
+                        <td>
+                            ₹6,500
+                        </td>
+
+                        <td>
+                            <span class="status-badge completed">
+                                Active
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            Urban Office
+                        </td>
+
+                        <td>
+                            Neha Patel
+                        </td>
+
+                        <td>
+                            Gandhinagar
+                        </td>
+
+                        <td>
+                            Professional
+                        </td>
+
+                        <td>
+                            ₹12,000
+                        </td>
+
+                        <td>
+                            <span class="status-badge completed">
+                                Active
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            City Retail Store
+                        </td>
+
+                        <td>
+                            Amit Mehta
+                        </td>
+
+                        <td>
+                            Ahmedabad
+                        </td>
+
+                        <td>
+                            Business
+                        </td>
+
+                        <td>
+                            ₹7,500
+                        </td>
+
+                        <td>
+                            <span class="status-badge completed">
+                                Active
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            FreshStay Hotel
+                        </td>
+
+                        <td>
+                            Priya Desai
+                        </td>
+
+                        <td>
+                            Gandhinagar
+                        </td>
+
+                        <td>
+                            Enterprise
+                        </td>
+
+                        <td>
+                            ₹22,000
+                        </td>
+
+                        <td>
+                            <span class="status-badge scheduled">
+                                Pending
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PICKUPS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-pickups"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                COLLECTION OPERATIONS
+            </span>
+
+            <h1>
+                Pickups
+            </h1>
+
+            <p>
+                Manage every collection request across the network.
+            </p>
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="createPickupButton"
+        >
+            + Create Pickup
+        </button>
+
+    </div>
+
+
+    <div class="dashboard-stat-grid">
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    PENDING
+                </span>
+
+            </div>
+
+            <strong>
+                18
+            </strong>
+
+            <small>
+                need assignment
+            </small>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    TODAY
+                </span>
+
+            </div>
+
+            <strong>
+                34
+            </strong>
+
+            <small>
+                scheduled
+            </small>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    IN PROGRESS
+                </span>
+
+            </div>
+
+            <strong>
+                11
+            </strong>
+
+            <small>
+                currently collecting
+            </small>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    COMPLETED
+                </span>
+
+            </div>
+
+            <strong>
+                426
+            </strong>
+
+            <small>
+                this month
+            </small>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+        <div class="admin-search-row">
+
+            <input
+                type="search"
+                placeholder="Search pickup..."
+            >
+
+            <select>
+
+                <option>
+                    All statuses
+                </option>
+
+                <option>
+                    Pending
+                </option>
+
+                <option>
+                    Assigned
+                </option>
+
+                <option>
+                    In progress
+                </option>
+
+                <option>
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="activity-table-wrapper">
+
+            <table class="activity-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            DATE
+                        </th>
+
+                        <th>
+                            CUSTOMER
+                        </th>
+
+                        <th>
+                            MATERIAL
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            PARTNER
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    <tr>
+
+                        <td>
+                            30 Aug
+                        </td>
+
+                        <td>
+                            Green Leaf Restaurant
+                        </td>
+
+                        <td>
+                            Cardboard · Plastic
+                        </td>
+
+                        <td>
+                            Ahmedabad
+                        </td>
+
+                        <td>
+                            Eco Collection 01
+                        </td>
+
+                        <td>
+                            <span class="status-badge scheduled">
+                                Assigned
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            30 Aug
+                        </td>
+
+                        <td>
+                            City Retail Store
+                        </td>
+
+                        <td>
+                            Cardboard
+                        </td>
+
+                        <td>
+                            Ahmedabad
+                        </td>
+
+                        <td>
+                            —
+                        </td>
+
+                        <td>
+                            <span class="status-badge pending-badge">
+                                Pending
+                            </span>
+                        </td>
+
+                    </tr>
+
+
+                    <tr>
+
+                        <td>
+                            29 Aug
+                        </td>
+
+                        <td>
+                            Urban Office
+                        </td>
+
+                        <td>
+                            Paper · E-waste
+                        </td>
+
+                        <td>
+                            Gandhinagar
+                        </td>
+
+                        <td>
+                            Eco Collection 02
+                        </td>
+
+                        <td>
+                            <span class="status-badge completed">
+                                Completed
+                            </span>
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     WASTE
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-waste"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                NETWORK WASTE DATA
+            </span>
+
+            <h1>
+                Waste
+            </h1>
+
+            <p>
+                Monitor material volumes across the network.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="waste-summary-grid">
+
+
+        <div class="waste-summary-card">
+
+            <span>
+                TOTAL COLLECTED
+            </span>
+
+            <strong>
+                24,820 kg
+            </strong>
+
+            <small>
+                August 2026
+            </small>
+
+        </div>
+
+
+        <div class="waste-summary-card">
+
+            <span>
+                RECYCLED
+            </span>
+
+            <strong>
+                21,260 kg
+            </strong>
+
+            <small>
+                85.7% recovery
+            </small>
+
+        </div>
+
+
+        <div class="waste-summary-card">
+
+            <span>
+                CUSTOMERS
+            </span>
+
+            <strong>
+                128
+            </strong>
+
+            <small>
+                contributing businesses
+            </small>
+
+        </div>
+
+
+        <div class="waste-summary-card">
+
+            <span>
+                AVG / CUSTOMER
+            </span>
+
+            <strong>
+                194 kg
+            </strong>
+
+            <small>
+                monthly average
+            </small>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+        <div class="panel-header">
+
+            <div>
+
+                <span class="panel-label">
+                    MATERIAL BREAKDOWN
+                </span>
+
+                <h2>
+                    Network-wide waste
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="material-list">
+
+
+            <div class="material-row">
+
+                <div class="material-name">
+
+                    <span class="material-dot cardboard"></span>
+
+                    Cardboard
+
+                </div>
+
+                <div class="material-progress">
+
+                    <div style="width:82%"></div>
+
+                </div>
+
+                <strong>
+                    10,420 kg
+                </strong>
+
+            </div>
+
+
+            <div class="material-row">
+
+                <div class="material-name">
+
+                    <span class="material-dot plastic"></span>
+
+                    Plastic
+
+                </div>
+
+                <div class="material-progress">
+
+                    <div style="width:58%"></div>
+
+                </div>
+
+                <strong>
+                    5,720 kg
+                </strong>
+
+            </div>
+
+
+            <div class="material-row">
+
+                <div class="material-name">
+
+                    <span class="material-dot metal"></span>
+
+                    Metal
+
+                </div>
+
+                <div class="material-progress">
+
+                    <div style="width:44%"></div>
+
+                </div>
+
+                <strong>
+                    4,240 kg
+                </strong>
+
+            </div>
+
+
+            <div class="material-row">
+
+                <div class="material-name">
+
+                    <span class="material-dot ewaste"></span>
+
+                    E-waste
+
+                </div>
+
+                <div class="material-progress">
+
+                    <div style="width:25%"></div>
+
+                </div>
+
+                <strong>
+                    2,100 kg
+                </strong>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     COLLECTION PARTNERS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-collection-partners"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                NETWORK
+            </span>
+
+            <h1>
+                Collection Partners
+            </h1>
+
+            <p>
+                Manage local collection partners and their assignments.
+            </p>
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            id="adminPartnerRefresh"
+        >
+            ↻ Refresh
+        </button>
+
+    </div>
+
+
+    <p
+        style="
+            margin: -6px 0 18px;
+            color: var(--text-medium);
+        "
+    >
+        Partners sign up on the
+        <a href="partner-register.html" target="_blank" rel="noopener">partner registration page</a>.
+        Approve them here before they can see and accept pickup requests.
+    </p>
+
+
+    <div
+        class="partner-admin-grid"
+        id="adminPartnerGrid"
+    >
+
+        <p style="color:#8a958c;">
+            Loading partners...
+        </p>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     RECYCLING PARTNERS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-recycling-partners"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                DOWNSTREAM NETWORK
+            </span>
+
+            <h1>
+                Recycling Partners
+            </h1>
+
+            <p>
+                Manage recyclers and processing partners.
+            </p>
+
+        </div>
+
+        <button class="btn btn-primary">
+            + Add Recycler
+        </button>
+
+    </div>
+
+
+    <div class="partner-admin-grid">
+
+
+        <div class="partner-admin-card">
+
+            <div class="partner-avatar">
+                RP
+            </div>
+
+            <div>
+
+                <h3>
+                    Paper Recovery Partner
+                </h3>
+
+                <p>
+                    Ahmedabad
+                </p>
+
+            </div>
+
+            <span class="status-badge completed">
+                Active
+            </span>
+
+            <div class="partner-stat">
+
+                <span>
+                    MATERIAL RECEIVED
+                </span>
+
+                <strong>
+                    10.4T
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="partner-admin-card">
+
+            <div class="partner-avatar">
+                PR
+            </div>
+
+            <div>
+
+                <h3>
+                    Plastic Recovery Partner
+                </h3>
+
+                <p>
+                    Ahmedabad
+                </p>
+
+            </div>
+
+            <span class="status-badge completed">
+                Active
+            </span>
+
+            <div class="partner-stat">
+
+                <span>
+                    MATERIAL RECEIVED
+                </span>
+
+                <strong>
+                    5.7T
+                </strong>
+
+            </div>
+
+        </div>
+
+
+        <div class="partner-admin-card">
+
+            <div class="partner-avatar">
+                EW
+            </div>
+
+            <div>
+
+                <h3>
+                    E-waste Processing Partner
+                </h3>
+
+                <p>
+                    Gujarat
+                </p>
+
+            </div>
+
+            <span class="status-badge completed">
+                Active
+            </span>
+
+            <div class="partner-stat">
+
+                <span>
+                    MATERIAL RECEIVED
+                </span>
+
+                <strong>
+                    2.1T
+                </strong>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     REPORTS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-reports"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                BUSINESS INTELLIGENCE
+            </span>
+
+            <h1>
+                Reports
+            </h1>
+
+            <p>
+                Monitor operational and commercial performance.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="report-grid">
+
+
+        <div class="report-card">
+
+            <div class="report-icon">
+                ▤
+            </div>
+
+            <div>
+
+                <span>
+                    AUGUST 2026
+                </span>
+
+                <h3>
+                    Network Waste Report
+                </h3>
+
+                <p>
+                    Total collection, recovery and
+                    material-flow performance.
+                </p>
+
+            </div>
+
+            <button>
+                View →
+            </button>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <div class="report-icon">
+                ₹
+            </div>
+
+            <div>
+
+                <span>
+                    AUGUST 2026
+                </span>
+
+                <h3>
+                    Revenue Report
+                </h3>
+
+                <p>
+                    Subscription revenue, material revenue
+                    and operating costs.
+                </p>
+
+            </div>
+
+            <button>
+                View →
+            </button>
+
+        </div>
+
+
+        <div class="report-card">
+
+            <div class="report-icon">
+                ♻
+            </div>
+
+            <div>
+
+                <span>
+                    Q3 2026
+                </span>
+
+                <h3>
+                    Recycling Performance
+                </h3>
+
+                <p>
+                    Material recovery and diversion
+                    performance across customers.
+                </p>
+
+            </div>
+
+            <button>
+                View →
+            </button>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="admin-settings"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                ADMINISTRATION
+            </span>
+
+            <h1>
+                Settings
+            </h1>
+
+            <p>
+                Manage your E-arthchakra operating preferences.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-grid">
+
+
+        <div class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        COMPANY
+                    </span>
+
+                    <h2>
+                        Business settings
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-form">
+
+                <div class="form-group">
+
+                    <label>
+                        Company name
+                    </label>
+
+                    <input
+                        type="text"
+                        value="E-arthchakra"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Service area
+                    </label>
+
+                    <input
+                        type="text"
+                        value="Ahmedabad, Gandhinagar, Mumbai"
+                    >
+
+                </div>
+
+
+                <button class="btn btn-primary">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        SYSTEM
+                    </span>
+
+                    <h2>
+                        Platform status
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="setting-toggle">
+
+                <div>
+
+                    <strong>
+                        Pickup notifications
+                    </strong>
+
+                    <span>
+                        Send operational alerts.
+                    </span>
+
+                </div>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+
+            <div class="setting-toggle">
+
+                <div>
+
+                    <strong>
+                        Monthly reports
+                    </strong>
+
+                    <span>
+                        Generate monthly reports.
+                    </span>
+
+                </div>
+
+                <label class="switch">
+
+                    <input
+                        type="checkbox"
+                        checked
+                    >
+
+                    <span class="slider"></span>
+
+                </label>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+
+
+<section class="dashboard-section" id="admin-scrap">
+<style>
+.sr-top{display:flex;gap:10px;flex-wrap:wrap;margin:6px 0 18px}.sr-top select{padding:10px 14px;border:1px solid var(--border);border-radius:10px;background:#fff;font-weight:600}
+.sr-th{width:56px;height:56px;border-radius:10px;object-fit:cover;background:#eee;cursor:pointer;display:block}
+.sr-act{display:flex;gap:6px;flex-wrap:wrap}.sr-act button,.sr-act a{padding:7px 12px;border-radius:9px;border:1px solid var(--border);background:#fff;font-size:.78rem;font-weight:700;cursor:pointer;color:inherit;white-space:nowrap}
+.sr-b{padding:4px 11px;border-radius:99px;font-size:.7rem;font-weight:800;background:#eef1ef;color:#536158;white-space:nowrap}
+.sr-b.NEW{background:#fff3d6;color:#9a6a00}.sr-b.VERIFIED,.sr-b.ASSIGNED{background:#e3eeff;color:#2455a6}.sr-b.COLLECTING{background:#efe5ff;color:#6a3db8}.sr-b.COLLECTED,.sr-b.RECYCLED{background:#e0f3e5;color:#18532f}.sr-b.REJECTED{background:#fde8e8;color:#b63a3a}
+dialog.sr-d{margin:auto;border:0;border-radius:20px;padding:0;width:min(560px,94vw);max-height:92vh;box-shadow:0 30px 80px rgba(13,43,27,.3)}dialog.sr-d::backdrop{background:rgba(13,43,27,.5)}
+.sr-gal{display:flex;gap:8px;flex-wrap:wrap}.sr-gal img{height:130px;max-width:100%;border-radius:12px;object-fit:cover}
+.sr-d>div{padding:24px}.sr-d img.big{width:100%;max-height:320px;object-fit:contain;background:#111;border-radius:14px}
+.sr-kv div{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-top:1px solid var(--border);font-size:.86rem}.sr-kv span{color:var(--text-light)}.sr-kv b{text-align:right}
+.sr-bt{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}.sr-bt input{flex:1;min-width:180px;padding:11px 13px;border:1px solid var(--border);border-radius:10px}
+.sr-bt button{padding:11px 16px;border-radius:10px;border:1px solid var(--border);background:#fff;font-weight:700;cursor:pointer}.sr-bt .go{background:#123b25;color:#fff;border-color:#123b25}.sr-bt .no{color:#b63a3a}
+</style>
+    <div class="dashboard-page-header"><div>
+        <span class="dashboard-date">COMMUNITY REPORTS</span>
+        <h1>Scrap / Waste Reports</h1>
+        <p>Photos and GPS locations submitted by users. Verify, assign a collector and track each report to recycling.</p>
+    </div></div>
+    <div class="sr-top">
+        <select id="srFilter"><option value="">All statuses</option><option>NEW</option><option>VERIFIED</option><option>ASSIGNED</option><option>COLLECTING</option><option>COLLECTED</option><option>RECYCLED</option><option>REJECTED</option></select>
+        <button class="btn btn-secondary" id="srRefresh">Refresh</button>
+    </div>
+    <div class="activity-table-wrapper">
+        <table class="activity-table">
+            <thead><tr><th>Photo</th><th>Type</th><th>Approx. location</th><th>Date / time</th><th>Reporter</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="srBody"><tr><td colspan="7">Open this tab to load reports…</td></tr></tbody>
+        </table>
+    </div>
+    <dialog class="sr-d" id="srDlg"><div id="srDlgBody"></div></dialog>
+</section>
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     ADMIN JAVASCRIPT
+===================================================== -->
+
+<script src="api.js"></script>
+<script>
+
+/* =====================================================
+   ADMIN AUTHENTICATION
+===================================================== */
+
+const adminUser =
+    JSON.parse(
+        localStorage.getItem("earthchakra_user")
+    );
+
+
+if (
+    !adminUser ||
+    !adminUser.loggedIn ||
+    adminUser.role !== "admin"
+) {
+
+    window.location.href =
+        "admin-login.html";
+
+}
+
+
+/* =====================================================
+   ADMIN NAVIGATION
+===================================================== */
+
+const adminLinks =
+    document.querySelectorAll(
+        "[data-admin-section]"
+    );
+
+const adminSections =
+    document.querySelectorAll(
+        ".dashboard-section"
+    );
+
+
+function showAdminSection(sectionName) {
+
+    adminSections.forEach(
+        section => {
+
+            section.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    adminLinks.forEach(
+        link => {
+
+            link.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    const section =
+        document.getElementById(
+            `admin-${sectionName}`
+        );
+
+
+    const link =
+        document.querySelector(
+            `[data-admin-section="${sectionName}"]`
+        );
+
+
+    if (section) {
+
+        section.classList.add(
+            "active"
+        );
+
+    }
+
+
+    if (link) {
+
+        link.classList.add(
+            "active"
+        );
+
+    }
+
+}
+
+
+adminLinks.forEach(
+    link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                showAdminSection(
+                    link.dataset.adminSection
+                );
+
+                /*
+                 * If the Pickups section is opened,
+                 * load the latest requests.
+                 */
+
+                if (
+                    link.dataset.adminSection ===
+                    "pickups"
+                ) {
+
+                    loadPickupRequests();
+
+                }
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   INTERNAL ADMIN LINKS
+===================================================== */
+
+document
+    .querySelectorAll(
+        "[data-admin-link]"
+    )
+    .forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    showAdminSection(
+                        link.dataset.adminLink
+                    );
+
+                    if (
+                        link.dataset.adminLink ===
+                        "pickups"
+                    ) {
+
+                        loadPickupRequests();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   MOBILE SIDEBAR
+===================================================== */
+
+const adminSidebar =
+    document.getElementById(
+        "adminSidebar"
+    );
+
+const adminOverlay =
+    document.getElementById(
+        "adminOverlay"
+    );
+
+const adminMenuButton =
+    document.getElementById(
+        "adminMenuButton"
+    );
+
+
+if (adminMenuButton) {
+
+    adminMenuButton.addEventListener(
+        "click",
+        () => {
+
+            adminSidebar.classList.add(
+                "open"
+            );
+
+            adminOverlay.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+if (adminOverlay) {
+
+    adminOverlay.addEventListener(
+        "click",
+        () => {
+
+            adminSidebar.classList.remove(
+                "open"
+            );
+
+            adminOverlay.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+const adminLogout =
+    document.getElementById(
+        "adminLogout"
+    );
+
+
+if (adminLogout) {
+
+    adminLogout.addEventListener(
+        "click",
+        () => {
+
+            EcoAPI.logout();
+
+            window.location.href =
+                "admin-login.html";
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD PICKUP REQUESTS
+===================================================== */
+
+function getPickupRequests() {
+    try {
+        return EcoAPI.getRequests();
+    } catch (error) {
+        console.error("Could not read pickup requests:", error);
+        return [];
+    }
+}
+
+
+/* =====================================================
+   UPDATE PICKUP STATISTICS
+===================================================== */
+
+function updatePickupStats(
+    requests
+) {
+
+    const pending =
+        requests.filter(
+            request =>
+                (request.status === "Pending" || request.status === "New")
+        ).length;
+
+
+    const assigned =
+        requests.filter(
+            request =>
+                request.status === "Assigned"
+        ).length;
+
+
+    const inProgress =
+        requests.filter(
+            request =>
+                request.status === "In Progress"
+        ).length;
+
+
+    const completed =
+        requests.filter(
+            request =>
+                request.status === "Completed"
+        ).length;
+
+
+    /*
+     * Find the four statistic cards
+     * inside the Pickups section.
+     */
+
+    const pickupSection =
+        document.getElementById(
+            "admin-pickups"
+        );
+
+
+    if (!pickupSection) {
+        return;
+    }
+
+
+    const cards =
+        pickupSection.querySelectorAll(
+            ".dashboard-stat-card strong"
+        );
+
+
+    if (cards.length >= 4) {
+
+        cards[0].textContent =
+            pending;
+
+        cards[1].textContent =
+            assigned + inProgress;
+
+        cards[2].textContent =
+            inProgress;
+
+        cards[3].textContent =
+            completed;
+
+    }
+
+}
+
+
+/* =====================================================
+   LOAD REQUESTS INTO PICKUPS TABLE
+===================================================== */
+
+function loadPickupRequests() {
+
+    const requests =
+        getPickupRequests();
+
+
+    updatePickupStats(
+        requests
+    );
+
+
+    const pickupSection =
+        document.getElementById(
+            "admin-pickups"
+        );
+
+
+    if (!pickupSection) {
+        return;
+    }
+
+
+    const table =
+        pickupSection.querySelector(
+            ".activity-table"
+        );
+
+
+    if (!table) {
+        return;
+    }
+
+
+    const tbody =
+        table.querySelector(
+            "tbody"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    if (requests.length === 0) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#8a958c;
+                    "
+                >
+
+                    No pickup requests yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+     * Newest requests first.
+     */
+
+    const sortedRequests =
+        [...requests].reverse();
+
+
+    sortedRequests.forEach(
+        request => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const submittedDate = new Date(
+                request.submittedAt || request.createdAt || Date.now()
+            );
+
+
+            const formattedDate =
+                submittedDate.toLocaleDateString(
+                    "en-IN",
+                    {
+                        day: "2-digit",
+                        month: "short"
+                    }
+                );
+
+
+            const wasteValues = Array.isArray(request.waste)
+                ? request.waste
+                : (Array.isArray(request.wasteTypes)
+                    ? request.wasteTypes
+                    : (typeof request.waste === "string" && request.waste
+                        ? request.waste.split(/\s*,\s*/)
+                        : []));
+
+            const waste = wasteValues.length
+                ? wasteValues.join(" · ")
+                : "Not specified";
+
+
+            /*
+             * Current partner.
+             */
+
+            const currentPartner =
+                request.partner ||
+                "";
+
+
+            /*
+             * Scheduled date.
+             */
+
+            const scheduledDate =
+                request.scheduledDate ||
+                "";
+
+
+            /*
+             * Scheduled time.
+             */
+
+            const scheduledTime =
+                request.scheduledTime ||
+                "";
+
+
+            /*
+             * Display schedule.
+             */
+
+            let scheduleText =
+                "Not scheduled";
+
+
+            if (
+                scheduledDate &&
+                scheduledTime
+            ) {
+
+                const schedule =
+                    new Date(
+                        `${scheduledDate}T${scheduledTime}`
+                    );
+
+
+                scheduleText =
+                    schedule.toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "2-digit",
+                            month: "short"
+                        }
+                    )
+                    +
+                    " · "
+                    +
+                    schedule.toLocaleTimeString(
+                        "en-IN",
+                        {
+                            hour: "2-digit",
+                            minute: "2-digit"
+                        }
+                    );
+
+            }
+
+
+            row.innerHTML = `
+
+                <!-- DATE -->
+
+                <td>
+
+                    ${formattedDate}
+
+                </td>
+
+
+                <!-- CUSTOMER -->
+
+                <td>
+
+                    <strong>
+
+                        ${escapeHTML(
+                            request.businessName ||
+                            "Unnamed Business"
+                        )}
+
+                    </strong>
+
+
+                    <small
+                        style="
+                            display:block;
+                            margin-top:4px;
+                            color:#8a958c;
+                            font-size:.52rem;
+                        "
+                    >
+
+                        ${escapeHTML(
+                            request.id
+                        )}
+
+                    </small>
+
+                </td>
+
+
+                <!-- MATERIAL -->
+
+                <td>
+
+                    ${escapeHTML(
+                        waste
+                    )}
+
+                </td>
+
+
+                <!-- LOCATION -->
+
+                <td>
+
+                    ${escapeHTML(
+                        request.city ||
+                        "—"
+                    )}
+
+                    ${pickupMapLink(request)}
+
+                </td>
+
+
+                <!-- PARTNER -->
+
+                <td>
+
+                    <select
+                        class="pickup-partner-select"
+                        data-request-id="${request.id}"
+                    >
+
+                        <option value="">
+                            Unassigned
+                        </option>
+
+                        ${partnerOptionsHTML(currentPartner)}
+
+                    </select>
+
+                </td>
+
+
+                <!-- SCHEDULE -->
+
+                <td>
+
+                    <div class="pickup-schedule">
+
+                        <input
+                            type="date"
+                            class="pickup-date-input"
+                            data-request-id="${request.id}"
+                            value="${scheduledDate}"
+                        >
+
+
+                        <input
+                            type="time"
+                            class="pickup-time-input"
+                            data-request-id="${request.id}"
+                            value="${scheduledTime}"
+                        >
+
+
+                        <small>
+                            ${scheduleText}
+                        </small>
+
+                    </div>
+
+                </td>
+
+
+                <!-- STATUS -->
+
+                <td>
+
+                    <select
+                        class="pickup-status-select"
+                        data-request-id="${request.id}"
+                    >
+
+                        <option
+                            value="Pending"
+                            ${
+                                request.status ===
+                                "Pending"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Pending
+                        </option>
+
+
+                        <option
+                            value="Assigned"
+                            ${
+                                request.status ===
+                                "Assigned"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Assigned
+                        </option>
+
+
+                        <option
+                            value="In Progress"
+                            ${
+                                request.status ===
+                                "In Progress"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            In Progress
+                        </option>
+
+
+                        <option
+                            value="Completed"
+                            ${
+                                request.status ===
+                                "Completed"
+                                    ? "selected"
+                                    : ""
+                            }
+                        >
+                            Completed
+                        </option>
+
+                    </select>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    /*
+     * STATUS CHANGE
+     */
+
+    document
+        .querySelectorAll(
+            ".pickup-status-select"
+        )
+        .forEach(
+            select => {
+
+                select.addEventListener(
+                    "change",
+                    function () {
+
+                        updateRequestStatus(
+                            this.dataset.requestId,
+                            this.value
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * PARTNER CHANGE
+     */
+
+    document
+        .querySelectorAll(
+            ".pickup-partner-select"
+        )
+        .forEach(
+            select => {
+
+                select.addEventListener(
+                    "change",
+                    function () {
+
+                        updateRequestPartner(
+                            this.dataset.requestId,
+                            this.value
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * DATE CHANGE
+     */
+
+    document
+        .querySelectorAll(
+            ".pickup-date-input"
+        )
+        .forEach(
+            input => {
+
+                input.addEventListener(
+                    "change",
+                    function () {
+
+                        updateRequestSchedule(
+                            this.dataset.requestId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+    /*
+     * TIME CHANGE
+     */
+
+    document
+        .querySelectorAll(
+            ".pickup-time-input"
+        )
+        .forEach(
+            input => {
+
+                input.addEventListener(
+                    "change",
+                    function () {
+
+                        updateRequestSchedule(
+                            this.dataset.requestId
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE REQUEST STATUS
+===================================================== */
+
+function updateRequestStatus(
+    requestId,
+    newStatus
+) {
+
+    const requests =
+        getPickupRequests();
+
+
+    const request =
+        requests.find(
+            item =>
+                item.id === requestId
+        );
+
+
+    if (!request) {
+
+        alert(
+            "Pickup request could not be found."
+        );
+
+        return;
+
+    }
+
+
+    request.status =
+        newStatus;
+
+
+    request.updatedAt =
+        new Date().toISOString();
+
+
+    /*
+     * Save updated request.
+     */
+
+    EcoAPI.saveRequest(request);
+
+
+    /*
+     * Refresh dashboard.
+     */
+
+    loadPickupRequests();
+
+
+    alert(
+        `Pickup ${requestId} updated to ${newStatus}.`
+    );
+
+}
+
+/* =====================================================
+   UPDATE PICKUP PARTNER
+===================================================== */
+
+function updateRequestPartner(
+    requestId,
+    partnerName
+) {
+
+    const requests =
+        getPickupRequests();
+
+
+    const request =
+        requests.find(
+            item =>
+                item.id === requestId
+        );
+
+
+    if (!request) {
+
+        return;
+
+    }
+
+
+    request.partner =
+        partnerName || null;
+
+
+    /*
+     * If a partner is assigned,
+     * automatically move Pending → Assigned.
+     */
+
+    if (
+        partnerName &&
+        (request.status === "Pending" || request.status === "New")
+    ) {
+
+        request.status =
+            "Assigned";
+
+    }
+
+
+    request.updatedAt =
+        new Date().toISOString();
+
+
+    EcoAPI.saveRequest(request);
+
+
+    loadPickupRequests();
+
+}
+
+/* =====================================================
+   UPDATE PICKUP SCHEDULE
+===================================================== */
+
+function updateRequestSchedule(
+    requestId
+) {
+
+    const requests =
+        getPickupRequests();
+
+
+    const request =
+        requests.find(
+            item =>
+                item.id === requestId
+        );
+
+
+    if (!request) {
+
+        return;
+
+    }
+
+
+    const dateInput =
+        document.querySelector(
+            `.pickup-date-input[data-request-id="${requestId}"]`
+        );
+
+
+    const timeInput =
+        document.querySelector(
+            `.pickup-time-input[data-request-id="${requestId}"]`
+        );
+
+
+    if (!dateInput || !timeInput) {
+
+        return;
+
+    }
+
+
+    request.scheduledDate =
+        dateInput.value || null;
+
+
+    request.scheduledTime =
+        timeInput.value || null;
+
+
+    /*
+     * If both date and time are selected,
+     * move the request to Assigned.
+     */
+
+    if (
+        request.scheduledDate &&
+        request.scheduledTime &&
+        (request.status === "Pending" || request.status === "New")
+    ) {
+
+        request.status =
+            "Assigned";
+
+    }
+
+
+    request.updatedAt =
+        new Date().toISOString();
+
+
+    EcoAPI.saveRequest(request);
+
+
+    loadPickupRequests();
+
+}
+
+
+/* =====================================================
+   HTML SAFETY
+===================================================== */
+
+function escapeHTML(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   CUSTOMER SEARCH
+===================================================== */
+
+const customerSearch =
+    document.getElementById(
+        "customerSearch"
+    );
+
+
+if (customerSearch) {
+
+    customerSearch.addEventListener(
+        "input",
+        function () {
+
+            const search =
+                this.value
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(
+                    "#customersTable tbody tr"
+                )
+                .forEach(
+                    row => {
+
+                        row.style.display =
+                            row.textContent
+                                .toLowerCase()
+                                .includes(
+                                    search
+                                )
+                                ? ""
+                                : "none";
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   CREATE PICKUP BUTTONS
+===================================================== */
+
+function createDemoPickup() {
+
+    alert(
+        "Admin pickup creation will be connected to the backend later."
+    );
+
+}
+
+
+const createPickupButton =
+    document.getElementById(
+        "createPickupButton"
+    );
+
+
+if (createPickupButton) {
+
+    createPickupButton.addEventListener(
+        "click",
+        createDemoPickup
+    );
+
+}
+
+
+const adminQuickPickup =
+    document.getElementById(
+        "adminQuickPickup"
+    );
+
+
+if (adminQuickPickup) {
+
+    adminQuickPickup.addEventListener(
+        "click",
+        createDemoPickup
+    );
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+/* (initial load happens at the bottom, after data is fetched) */
+
+/* =====================================================
+   REAL ADMIN OVERVIEW
+===================================================== */
+
+
+/*
+ * Get all requests from localStorage.
+ */
+
+/*
+ * "Open in Maps" link for the exact GPS spot the customer captured.
+ * Older pickups have no coordinates, so this returns nothing for them.
+ */
+
+function pickupMapLink(request) {
+
+    if (
+        typeof request.latitude !== "number" ||
+        typeof request.longitude !== "number"
+    ) {
+        return "";
+    }
+
+    const coords =
+        `${request.latitude.toFixed(6)},${request.longitude.toFixed(6)}`;
+
+    const accuracy =
+        request.locationSource === "manual"
+            ? " (pin set by customer)"
+            : typeof request.locationAccuracy === "number"
+                ? ` (±${Math.round(request.locationAccuracy)} m)`
+                : "";
+
+    return `<br><a href="https://www.google.com/maps/search/?api=1&query=${coords}" target="_blank" rel="noopener" style="font-size:.8rem;font-weight:700;color:var(--green-800,#18532f)">📍 Open in Maps${accuracy}</a>`;
+
+}
+
+
+function getAdminRequests() {
+    return getPickupRequests();
+}
+
+
+/* =====================================================
+   UPDATE OVERVIEW STATISTICS
+===================================================== */
+
+function updateAdminOverview() {
+
+    const requests =
+        getAdminRequests();
+
+
+    /*
+     * -----------------------------------------------
+     * UNIQUE CUSTOMERS
+     * -----------------------------------------------
+     */
+
+    const customerNames =
+        new Set();
+
+
+    requests.forEach(
+        request => {
+
+            if (
+                request.businessName
+            ) {
+
+                customerNames.add(
+                    request.businessName
+                        .trim()
+                        .toLowerCase()
+                );
+
+            }
+
+        }
+    );
+
+
+    const customerCount =
+        customerNames.size;
+
+
+    /*
+     * -----------------------------------------------
+     * REQUEST COUNTS
+     * -----------------------------------------------
+     */
+
+    const totalRequests =
+        requests.length;
+
+
+    const completedRequests =
+        requests.filter(
+            request =>
+                request.status ===
+                "Completed"
+        ).length;
+
+
+    const pendingRequests =
+        requests.filter(
+            request =>
+                request.status ===
+                "Pending"
+        ).length;
+
+
+    const assignedRequests =
+        requests.filter(
+            request =>
+                request.status ===
+                "Assigned"
+        ).length;
+
+
+    const inProgressRequests =
+        requests.filter(
+            request =>
+                request.status ===
+                "In Progress"
+        ).length;
+
+
+    /*
+     * -----------------------------------------------
+     * COMPLETION RATE
+     * -----------------------------------------------
+     */
+
+    let completionRate = 0;
+
+
+    if (totalRequests > 0) {
+
+        completionRate =
+            Math.round(
+                (
+                    completedRequests /
+                    totalRequests
+                ) * 100
+            );
+
+    }
+
+
+    /*
+     * -----------------------------------------------
+     * UPDATE HTML
+     * -----------------------------------------------
+     */
+
+    const activeCustomers =
+        document.getElementById(
+            "adminActiveCustomers"
+        );
+
+
+    const totalRequestsElement =
+        document.getElementById(
+            "adminTotalRequests"
+        );
+
+
+    const completedElement =
+        document.getElementById(
+            "adminCompletedPickups"
+        );
+
+
+    const completionRateElement =
+        document.getElementById(
+            "adminCompletionRate"
+        );
+
+
+    const customerChange =
+        document.getElementById(
+            "adminCustomerChange"
+        );
+
+
+    if (activeCustomers) {
+
+        activeCustomers.textContent =
+            customerCount;
+
+    }
+
+
+    if (totalRequestsElement) {
+
+        totalRequestsElement.textContent =
+            totalRequests;
+
+    }
+
+
+    if (completedElement) {
+
+        completedElement.textContent =
+            completedRequests;
+
+    }
+
+
+    if (completionRateElement) {
+
+        completionRateElement.textContent =
+            `${completionRate}% completion rate`;
+
+    }
+
+
+    if (customerChange) {
+
+        customerChange.textContent =
+            `${pendingRequests} pending`;
+
+    }
+
+
+    /*
+     * -----------------------------------------------
+     * LOAD OVERVIEW QUEUE
+     * -----------------------------------------------
+     */
+
+    updateOverviewQueue(
+        requests
+    );
+
+
+    /*
+     * -----------------------------------------------
+     * LOAD RECENT CUSTOMERS
+     * -----------------------------------------------
+     */
+
+    updateRecentCustomers(
+        requests
+    );
+
+
+    /*
+     * Log useful information while developing.
+     */
+
+    console.log(
+        "Admin overview updated:",
+        {
+            customers:
+                customerCount,
+
+            requests:
+                totalRequests,
+
+            pending:
+                pendingRequests,
+
+            assigned:
+                assignedRequests,
+
+            inProgress:
+                inProgressRequests,
+
+            completed:
+                completedRequests
+        }
+    );
+
+}
+
+
+/* =====================================================
+   OVERVIEW PICKUP QUEUE
+===================================================== */
+
+function updateOverviewQueue(
+    requests
+) {
+
+    const queue =
+        document.getElementById(
+            "adminOverviewQueue"
+        );
+
+
+    if (!queue) {
+        return;
+    }
+
+
+    queue.innerHTML = "";
+
+
+    /*
+     * Show only active requests.
+     */
+
+    const activeRequests =
+        requests.filter(
+            request =>
+                request.status !==
+                "Completed"
+        );
+
+
+    /*
+     * Newest first.
+     */
+
+    activeRequests.sort(
+        (a, b) => {
+
+            return new Date(
+                b.submittedAt
+            ) -
+            new Date(
+                a.submittedAt
+            );
+
+        }
+    );
+
+
+    /*
+     * Show maximum 5 requests
+     * on Overview.
+     */
+
+    const displayRequests =
+        activeRequests.slice(
+            0,
+            5
+        );
+
+
+    if (
+        displayRequests.length === 0
+    ) {
+
+        queue.innerHTML = `
+
+            <div
+                class="admin-queue-empty"
+                style="
+                    padding:30px 0;
+                    text-align:center;
+                    color:#8a958c;
+                    font-size:.62rem;
+                "
+            >
+
+                No active pickup requests.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    displayRequests.forEach(
+        request => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "admin-queue-item";
+
+
+            /*
+             * Status icon.
+             */
+
+            let icon =
+                "!";
+
+
+            let statusClass =
+                "pending";
+
+
+            if (
+                request.status ===
+                "Assigned"
+            ) {
+
+                icon =
+                    "✓";
+
+                statusClass =
+                    "assigned";
+
+            }
+
+
+            if (
+                request.status ===
+                "In Progress"
+            ) {
+
+                icon =
+                    "→";
+
+                statusClass =
+                    "assigned";
+
+            }
+
+
+            /*
+             * Materials.
+             */
+
+            const waste =
+                request.waste &&
+                request.waste.length
+                    ? request.waste.join(
+                        " · "
+                    )
+                    : "Waste collection";
+
+
+            /*
+             * Partner.
+             */
+
+            const partner =
+                request.partner ||
+                "Awaiting assignment";
+
+
+            item.innerHTML = `
+
+                <div
+                    class="queue-status ${statusClass}"
+                >
+                    ${icon}
+                </div>
+
+
+                <div>
+
+                    <strong>
+                        ${escapeAdminHTML(
+                            request.businessName ||
+                            "Unnamed Business"
+                        )}
+                    </strong>
+
+
+                    <span>
+                        ${escapeAdminHTML(
+                            waste
+                        )}
+                    </span>
+
+
+                    <small>
+                        ${escapeAdminHTML(
+                            partner
+                        )}
+                    </small>
+
+                </div>
+
+
+                <span
+                    class="status-badge ${
+                        getAdminStatusClass(
+                            request.status
+                        )
+                    }"
+                >
+                    ${escapeAdminHTML(
+                        request.status ||
+                        "Pending"
+                    )}
+                </span>
+
+            `;
+
+
+            queue.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   RECENT CUSTOMERS
+===================================================== */
+
+function updateRecentCustomers(
+    requests
+) {
+
+    const tbody =
+        document.getElementById(
+            "adminRecentCustomers"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    /*
+     * Build unique customers.
+     */
+
+    const customers =
+        [];
+
+
+    requests.forEach(
+        request => {
+
+            if (
+                !request.businessName
+            ) {
+
+                return;
+
+            }
+
+
+            const existing =
+                customers.find(
+                    customer =>
+                        customer.businessName
+                            .toLowerCase() ===
+                        request.businessName
+                            .toLowerCase()
+                );
+
+
+            if (!existing) {
+
+                customers.push(
+                    request
+                );
+
+            }
+
+        }
+    );
+
+
+    /*
+     * Newest customers first.
+     */
+
+    customers.sort(
+        (a, b) => {
+
+            return new Date(
+                b.submittedAt
+            ) -
+            new Date(
+                a.submittedAt
+            );
+
+        }
+    );
+
+
+    /*
+     * Show newest five.
+     */
+
+    customers
+        .slice(
+            0,
+            5
+        )
+        .forEach(
+            customer => {
+
+                const row =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                row.innerHTML = `
+
+                    <td>
+
+                        ${escapeAdminHTML(
+                            customer.businessName
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeAdminHTML(
+                            customer.businessType ||
+                            "Business"
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        ${escapeAdminHTML(
+                            customer.city ||
+                            "—"
+                        )}
+
+                    </td>
+
+
+                    <td>
+
+                        Business
+
+                    </td>
+
+
+                    <td>
+
+                        <span
+                            class="status-badge completed"
+                        >
+                            Active
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(
+                    row
+                );
+
+            }
+        );
+
+
+    if (
+        customers.length === 0
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        padding:35px;
+                        color:#8a958c;
+                    "
+                >
+
+                    No customers yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+    }
+
+}
+
+
+/* =====================================================
+   ADMIN STATUS CLASS
+===================================================== */
+
+function getAdminStatusClass(
+    status
+) {
+
+    switch (status) {
+
+        case "Completed":
+
+            return "completed";
+
+
+        case "Assigned":
+
+            return "scheduled";
+
+
+        case "In Progress":
+
+            return "assigned-badge";
+
+
+        case "Pending":
+
+            return "pending-badge";
+
+
+        default:
+
+            return "scheduled";
+
+    }
+
+}
+
+
+/* =====================================================
+   ADMIN HTML SAFETY
+===================================================== */
+
+function escapeAdminHTML(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   COLLECTION PARTNERS
+===================================================== */
+
+let adminPartners = [];
+
+
+function approvedPartnerNames() {
+
+    return adminPartners
+        .filter(partner => partner.partnerStatus === "approved")
+        .map(partner => partner.partnerName)
+        .filter(Boolean);
+
+}
+
+
+function partnerOptionsHTML(currentPartner) {
+
+    const names =
+        approvedPartnerNames();
+
+
+    // Keep a pickup's current partner visible even if it is no longer approved.
+    if (
+        currentPartner &&
+        !names.includes(currentPartner)
+    ) {
+
+        names.push(currentPartner);
+
+    }
+
+
+    return names
+        .map(
+            name => `
+                <option
+                    value="${escapeAdminHTML(name)}"
+                    ${name === currentPartner ? "selected" : ""}
+                >
+                    ${escapeAdminHTML(name)}
+                </option>
+            `
+        )
+        .join("");
+
+}
+
+
+async function loadAdminPartners() {
+
+    try {
+
+        adminPartners =
+            await EcoAPI.listPartners();
+
+    } catch (error) {
+
+        console.error(error);
+
+        return;
+
+    }
+
+
+    renderAdminPartners();
+
+    // Re-render the pickups table so the partner dropdowns list the new partners.
+    loadPickupRequests();
+
+}
+
+
+function renderAdminPartners() {
+
+    const approved =
+        adminPartners.filter(p => p.partnerStatus === "approved").length;
+
+    const pending =
+        adminPartners.filter(p => p.partnerStatus === "pending").length;
+
+
+    document.getElementById("adminPartnerCount").textContent =
+        approved;
+
+    document.getElementById("adminPartnerPending").textContent =
+        pending
+            ? `${pending} awaiting approval`
+            : "Currently available";
+
+
+    const grid =
+        document.getElementById("adminPartnerGrid");
+
+
+    if (!adminPartners.length) {
+
+        grid.innerHTML = `
+            <p style="color:#8a958c;">
+                No partners have registered yet.
+            </p>
+        `;
+
+        return;
+
+    }
+
+
+    // Pending first, so new sign-ups are easy to spot.
+    const order = { pending: 0, approved: 1, suspended: 2 };
+
+    const partners =
+        [...adminPartners].sort(
+            (a, b) =>
+                order[a.partnerStatus] - order[b.partnerStatus]
+        );
+
+
+    grid.innerHTML =
+        partners
+            .map(
+                partner => {
+
+                    const name =
+                        partner.partnerName ||
+                        partner.name;
+
+                    const initials =
+                        name
+                            .split(/\s+/)
+                            .filter(Boolean)
+                            .slice(0, 2)
+                            .map(word => word[0].toUpperCase())
+                            .join("");
+
+                    const badge = {
+                        approved: ["completed", "Active"],
+                        pending: ["pending-badge", "Pending"],
+                        suspended: ["pending-badge", "Suspended"]
+                    }[partner.partnerStatus];
+
+                    const actions =
+                        partner.partnerStatus === "approved"
+                            ? `<button class="partner-action-btn" data-partner-id="${partner.id}" data-partner-status="suspended">Suspend</button>`
+                            : `<button class="partner-action-btn" data-partner-id="${partner.id}" data-partner-status="approved">Approve</button>`;
+
+                    return `
+
+                        <div class="partner-admin-card">
+
+                            <div class="partner-avatar">
+                                ${escapeAdminHTML(initials)}
+                            </div>
+
+                            <div>
+
+                                <h3>
+                                    ${escapeAdminHTML(name)}
+                                </h3>
+
+                                <p>
+                                    ${escapeAdminHTML(partner.city || "—")}
+                                    · ${escapeAdminHTML(partner.name)}
+                                </p>
+
+                                <p>
+                                    ${escapeAdminHTML(partner.email)}
+                                    ${partner.phone ? " · " + escapeAdminHTML(partner.phone) : ""}
+                                </p>
+
+                            </div>
+
+                            <span class="status-badge ${badge[0]}">
+                                ${badge[1]}
+                            </span>
+
+                            <div class="partner-stat">
+
+                                <span>
+                                    ACTIVE · DONE THIS MONTH
+                                </span>
+
+                                <strong>
+                                    ${partner.activePickups} · ${partner.completedThisMonth}
+                                </strong>
+
+                            </div>
+
+                            <div style="margin-top:14px;">
+                                ${actions}
+                            </div>
+
+                        </div>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    grid
+        .querySelectorAll("[data-partner-id]")
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    async () => {
+
+                        const status =
+                            button.dataset.partnerStatus;
+
+                        if (
+                            status === "suspended" &&
+                            !confirm("Suspend this partner? They will no longer see or update pickups.")
+                        ) {
+                            return;
+                        }
+
+                        button.disabled = true;
+
+                        try {
+
+                            await EcoAPI.setPartnerStatus(
+                                button.dataset.partnerId,
+                                status
+                            );
+
+                        } catch (error) {
+
+                            alert(error.message);
+
+                        }
+
+                        loadAdminPartners();
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+document
+    .querySelector('[data-admin-section="collection-partners"]')
+    .addEventListener("click", loadAdminPartners);
+
+document
+    .getElementById("adminPartnerRefresh")
+    .addEventListener("click", loadAdminPartners);
+
+
+/* =====================================================
+   INITIAL OVERVIEW LOAD
+===================================================== */
+
+EcoAPI.loadRequests().then(() => {
+    loadPickupRequests();
+    updateAdminOverview();
+    loadAdminPartners();
+}).catch((error) => console.error(error));
+
+
+/*
+ * Re-fetch every 15 seconds so new pickup requests appear
+ * (kept gentle: each refresh is one serverless call + one DB query).
+ */
+
+setInterval(() => {
+    EcoAPI.loadRequests()
+        .then(updateAdminOverview)
+        .catch((error) => console.error(error));
+}, 15000);
+
+
+</script>
+
+
+<script>
+(() => {
+  const $ = (i) => document.getElementById(i);
+  const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  const when = (d) => d ? new Date(d).toLocaleString("en-IN", {day:"numeric", month:"short", year:"numeric", hour:"2-digit", minute:"2-digit"}) : "—";
+  const map = (r) => `https://www.google.com/maps/search/?api=1&query=${r.latitude},${r.longitude}`;
+  const approx = (r) => `≈ ${r.latitude.toFixed(3)}, ${r.longitude.toFixed(3)}`;   // ~100 m in the table; exact values are in the details
+  let reports = [];
+
+  async function load() {
+    $("srBody").innerHTML = `<tr><td colspan="7">Loading…</td></tr>`;
+    try {
+      const f = $("srFilter").value;
+      reports = (await EcoAPI.call("/reports" + (f ? "?status=" + f : ""))).reports;
+      draw();
+    } catch (e) { $("srBody").innerHTML = `<tr><td colspan="7">${esc(e.message)}</td></tr>`; }
+  }
+  function draw() {
+    $("srBody").innerHTML = reports.length ? reports.map((r) => `<tr>
+      <td><img class="sr-th" src="${esc(r.photoUrl)}" alt="" data-v="${r.id}" loading="lazy"></td>
+      <td><b>${esc(r.wasteType)}</b></td><td>${approx(r)}</td><td>${when(r.createdAt)}</td>
+      <td>${esc(r.reporter ? r.reporter.name : "—")}<br><small>${esc(r.reporter ? r.reporter.businessName || r.reporter.email : "")}</small></td>
+      <td><span class="sr-b ${esc(r.status)}">${esc(r.status)}</span></td>
+      <td><div class="sr-act"><button data-v="${r.id}">View</button><a href="${map(r)}" target="_blank" rel="noopener">View Location</a></div></td></tr>`).join("")
+      : `<tr><td colspan="7">No reports yet.</td></tr>`;
+    $("srBody").querySelectorAll("[data-v]").forEach((el) => el.onclick = () => open(el.dataset.v));
+  }
+  function open(id) {
+    const r = reports.find((x) => x.id === id); if (!r) return;
+    const A = {NEW: [["verify", "Verify", "go"], ["reject", "Reject", "no"]], VERIFIED: [["reject", "Reject", "no"]], ASSIGNED: [["collecting", "Start collecting"], ["collected", "Mark collected", "go"]],
+      COLLECTING: [["collected", "Mark collected", "go"]], COLLECTED: [["recycled", "Mark recycled", "go"]]}[r.status] || [];
+    const assign = r.status === "VERIFIED" || r.status === "ASSIGNED";
+    $("srDlgBody").innerHTML = `<div class="sr-gal">${(r.photos && r.photos.length ? r.photos : [{url: r.photoUrl}]).map((p) => `<a href="${esc(p.url)}" target="_blank" rel="noopener"><img src="${esc(p.url)}" alt="Reported waste"></a>`).join("")}</div>
+      <h3 style="margin:16px 0 10px">${esc(r.wasteType)} <span class="sr-b ${esc(r.status)}">${esc(r.status)}</span></h3>
+      <div class="sr-kv">
+        <div><span>Reporter</span><b>${esc(r.reporter ? r.reporter.name + " · " + (r.reporter.phone || r.reporter.email) : "—")}</b></div>
+        <div><span>Reported</span><b>${when(r.createdAt)}</b></div>
+        <div><span>Coordinates</span><b>${r.latitude.toFixed(5)}, ${r.longitude.toFixed(5)}${r.locationAccuracy != null ? " (±" + r.locationAccuracy + " m)" : ""}</b></div>
+        <div><span>Collector</span><b>${esc(r.collector || "Not assigned")}</b></div>
+        ${r.description ? `<div><span>Notes</span><b>${esc(r.description)}</b></div>` : ""}
+        <div><span>History</span><b>${(r.history || []).map((h) => esc(h.status)).join(" → ")}</b></div></div>
+      <div class="sr-bt">
+        ${assign ? `<input id="srCol" placeholder="Collector name" value="${esc(r.collector || "")}"><button class="go" data-a="assign">${r.status === "ASSIGNED" ? "Re-assign" : "Assign collector"}</button>` : ""}
+        ${A.map(([a, t, c]) => `<button class="${c || ""}" data-a="${a}">${t}</button>`).join("")}
+        <button type="button" onclick="window.open('${map(r)}','_blank','noopener')">View Location</button>
+        <button type="button" onclick="srDlg.close()">Close</button></div>
+      <div id="srErr" style="color:#b63a3a;font-size:.85rem;margin-top:10px"></div>`;
+    $("srDlgBody").querySelectorAll("[data-a]").forEach((b) => b.onclick = async () => {
+      b.disabled = true;
+      try {
+        const body = {action: b.dataset.a}; if (b.dataset.a === "assign") body.collector = $("srCol").value.trim();
+        const {report} = await EcoAPI.call("/reports/" + r.id, {method: "PATCH", body});
+        reports[reports.findIndex((x) => x.id === r.id)] = report; draw(); open(r.id);
+      } catch (e) { $("srErr").textContent = e.message; b.disabled = false; }
+    });
+    if (!$("srDlg").open) $("srDlg").showModal();
+  }
+  $("srFilter").onchange = load; $("srRefresh").onclick = load;
+  $("srDlg").addEventListener("click", (e) => { if (e.target === $("srDlg")) $("srDlg").close(); });
+  document.querySelector('[data-admin-section="scrap"]').addEventListener("click", load);
+})();
+</script>
+</body>
+
+</html>

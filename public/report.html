@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Report Waste — E-arthchakra</title>
+<meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<style>
+.rp{max-width:760px;margin:0 auto;padding:40px 20px 90px}.rp h1{font-size:2.3rem;letter-spacing:-.04em;margin:10px 0 8px}.rp>p.l{color:var(--text-medium);margin-bottom:26px}
+.rp-card{background:#fff;border:1px solid var(--border);border-radius:22px;padding:26px;margin-bottom:18px;box-shadow:var(--shadow-sm)}
+.rp-card h2{font-size:1rem;display:flex;align-items:center;gap:10px;margin-bottom:6px}.rp-card h2 i{font-style:normal;width:26px;height:26px;border-radius:50%;background:var(--green-800);color:#fff;font-size:.78rem;display:grid;place-items:center}
+.rp-card p.h{font-size:.82rem;color:var(--text-light);margin-bottom:14px}
+.rp-row{display:flex;gap:12px;flex-wrap:wrap}.rp-b{flex:1;min-width:150px;display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 16px;border-radius:14px;border:1px solid var(--border);background:var(--off-white);font-weight:700;font-size:.9rem;cursor:pointer;color:var(--text-dark);transition:.2s}
+.rp-b:hover{border-color:var(--green-500);background:#fff}.rp-b:disabled{opacity:.55;cursor:not-allowed}
+.rp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:10px;margin-top:14px}
+.rp-ph{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#eee}.rp-ph img{width:100%;height:100%;object-fit:cover;display:block}
+.rp-ph button{position:absolute;top:6px;right:6px;width:26px;height:26px;border:0;border-radius:50%;background:rgba(0,0,0,.65);color:#fff;font-size:1rem;line-height:1;cursor:pointer}
+.rp-ph b{position:absolute;left:0;right:0;bottom:0;padding:3px;text-align:center;font-size:.68rem;background:rgba(18,59,37,.85);color:#fff}
+.rp-chips{display:flex;flex-wrap:wrap;gap:10px}.rp-chips label{cursor:pointer}.rp-chips input{position:absolute;opacity:0}
+.rp-chips span{display:inline-block;padding:10px 18px;border-radius:99px;border:1px solid var(--border);background:var(--off-white);font-weight:700;font-size:.86rem}
+.rp-chips input:checked+span{background:var(--green-800);color:#fff;border-color:var(--green-800)}
+.rp-loc{margin-top:14px;padding:14px 16px;border-radius:14px;font-size:.88rem;display:none;line-height:1.6}.rp-loc.ok{display:block;background:#eaf6ec;color:#18532f}.rp-loc.warn{display:block;background:#fff6dd;color:#7a5600}.rp-loc.err{display:block;background:#fdeeee;color:#9b2c2c}
+#map{display:none;height:250px;border-radius:16px;margin-top:14px;z-index:0}.rp-note{font-size:.76rem;color:var(--text-light);margin-top:10px}
+.rp textarea{width:100%;min-height:90px;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--off-white);font:inherit;font-size:.92rem;resize:vertical}
+.rp-chk{display:flex;gap:16px;flex-wrap:wrap;margin:6px 2px 8px;font-size:.88rem;font-weight:700;color:var(--text-light)}.rp-chk .ok{color:#18532f}
+.rp-msg{display:none;margin:12px 0;padding:13px 16px;border-radius:12px;background:#fdeeee;color:#9b2c2c;font-size:.88rem;font-weight:600}.rp-msg.show{display:block}
+#send:disabled{opacity:.55;cursor:not-allowed}
+.rp-ok{display:none;text-align:center;padding:44px 20px}.rp-ok.show{display:block}.rp-ok b{display:block;font-size:2.4rem}.rp-ok h2{justify-content:center;font-size:1.4rem;margin:10px 0}
+.rp-my{display:grid;gap:12px}.rp-item{display:flex;gap:14px;align-items:center;padding:12px;border:1px solid var(--border);border-radius:16px}
+.rp-item img{width:64px;height:64px;border-radius:12px;object-fit:cover;background:#eee;flex:none}.rp-item div{flex:1;min-width:0;font-size:.84rem;color:var(--text-medium)}.rp-item b{color:var(--text-dark)}
+.st{padding:5px 12px;border-radius:99px;font-size:.72rem;font-weight:800;background:#eef1ef;color:#536158;white-space:nowrap}.st.NEW{background:#fff3d6;color:#9a6a00}.st.VERIFIED,.st.ASSIGNED{background:#e3eeff;color:#2455a6}.st.COLLECTING{background:#efe5ff;color:#6a3db8}.st.COLLECTED,.st.RECYCLED{background:#e0f3e5;color:#18532f}.st.REJECTED{background:#fde8e8;color:#b63a3a}
+@media(max-width:520px){.rp h1{font-size:1.8rem}.rp-card{padding:20px}}
+</style>
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+    <link rel="stylesheet" href="app.css">
+</head>
+<body>
+<!-- EC:HEADER -->
+<header class="navbar app-nav">
+    <div class="app-nav-in">
+        <a href="index.html" class="brand" aria-label="E-arthchakra home">
+            <img src="brand-mark.svg" alt="" width="36" height="36">
+            <span class="brand-word"><b>E</b>-arth<i>chakra</i></span>
+        </a>
+        <div class="app-loc-wrap" data-loc>
+            <button class="app-loc" type="button" data-loc-btn aria-haspopup="listbox" aria-expanded="false" aria-label="Choose your city">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12z"/><circle cx="12" cy="10" r="2.6"/></svg>
+                <span data-city-label>Ahmedabad</span>
+                <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <ul class="app-loc-menu" role="listbox" aria-label="Cities" data-loc-menu hidden>
+                <li role="option" data-city="Ahmedabad">Ahmedabad</li>
+                <li role="option" data-city="Gandhinagar">Gandhinagar</li>
+                <li role="option" data-city="Mumbai">Mumbai</li>
+            </ul>
+        </div>
+        <form class="app-search" role="search" action="index.html#items" data-search-form>
+            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+            <input type="search" name="q" data-search placeholder="Search scrap items" autocomplete="off" aria-label="Search scrap items">
+            <div class="app-suggest" data-suggest hidden></div>
+        </form>
+        <nav class="nav-links app-links" aria-label="Main">
+            <a href="solutions.html">For Business</a>
+            <a href="pricing.html">Pricing</a>
+        </nav>
+        <div class="nav-actions">
+            <a href="index.html#items" class="btn app-cta">Book pickup</a>
+            <button class="mobile-menu-btn" id="mobileMenuBtn" type="button" aria-label="Open menu">☰</button>
+        </div>
+    </div>
+</header>
+<div class="mobile-menu" id="mobileMenu">
+    <a href="index.html">Home</a>
+    <a href="index.html#items">Book a pickup</a>
+    <a href="solutions.html">For Business</a>
+    <a href="pricing.html">Pricing</a>
+    <a href="report.html">Report waste</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html#items" class="mobile-cta">Book a pickup</a>
+</div>
+<!-- /EC:HEADER -->
+
+
+<main class="rp">
+  <div class="eyebrow">COMMUNITY REPORT</div>
+  <h1>Report Waste</h1>
+  <p class="l">Seen garbage dumped on a road, footpath or open plot? Add photos and the exact location so our team can find and clear it. For your own scrap at home or work, <a href="pickup.html" style="color:var(--forest);font-weight:700;text-decoration:underline">book a pickup</a> instead.</p>
+
+  <form id="rf" novalidate>
+    <div class="rp-card"><h2><i>1</i> Waste details</h2>
+      <p class="h">Waste type</p><div class="rp-chips" id="types"></div>
+      <p class="h" style="margin-top:16px">Description (optional)</p>
+      <textarea id="desc" maxlength="500" placeholder="e.g. Pile of old pipes behind the market"></textarea>
+    </div>
+
+    <div class="rp-card"><h2><i>2</i> Upload photos</h2>
+      <p class="h">Up to 5 photos · JPG, PNG or WebP · 5 MB each · <span id="pcount">0/5</span></p>
+      <div class="rp-row"><button type="button" class="rp-b" id="cam">📷 Camera</button><button type="button" class="rp-b" id="pick">🖼 Choose Photos</button></div>
+      <input type="file" id="fCam" accept="image/*" capture="environment" hidden>
+      <input type="file" id="fPick" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      <div class="rp-grid" id="grid"></div>
+    </div>
+
+    <div class="rp-card"><h2><i>3</i> Location</h2>
+      <p class="h">Your location is used only to identify the waste collection/reporting location. We only ask when you tap the button.</p>
+      <button type="button" class="rp-b" id="gps" style="width:100%">📍 Use My Current Location</button>
+      <div class="rp-loc" id="loc" role="status"></div>
+      <div id="map" aria-label="Map preview"></div>
+      <p class="rp-note" id="mapnote" style="display:none">Drag the pin if it is slightly off — the pin position is what we save.</p>
+    </div>
+
+    <div class="rp-chk" id="chk"><span id="cp">○ Photo</span><span id="cl">○ Location</span><span id="ct">○ Waste type</span></div>
+    <div class="rp-msg" id="msg" role="alert"></div>
+    <button type="submit" class="btn btn-primary btn-large" id="send" style="width:100%" disabled>Submit Waste Report</button>
+  </form>
+
+  <div class="rp-card rp-ok" id="done"><b>✅</b><h2>Waste report submitted successfully.</h2><p style="color:var(--text-medium)">Our team will review it shortly. Follow its status below.</p>
+    <button class="rp-b" id="again" style="margin-top:18px;flex:none;min-width:220px">Report another</button></div>
+
+  <div class="rp-card" style="margin-top:34px"><h2>My reports</h2><div class="rp-my" id="my"><p style="color:var(--text-light);font-size:.9rem">Loading…</p></div></div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="script.js"></script>
+<script src="api.js"></script>
+<script>
+const $ = (i) => document.getElementById(i);
+const esc = (v) => String(v ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const TYPES = ["Plastic","Paper","Cardboard","Metal","Glass","E-waste","Mixed","Other"];
+const LABEL = {NEW:"Received",VERIFIED:"Verified",REJECTED:"Not accepted",ASSIGNED:"Collector assigned",COLLECTING:"Being collected",COLLECTED:"Collected",RECYCLED:"Recycled"};
+const MAX_PHOTOS = 5, MAX_BYTES = 5 * 1024 * 1024, GOOD_ACCURACY = 100;
+let me = null; try { me = JSON.parse(localStorage.getItem("earthchakra_user") || "null"); } catch (e) {}
+if (!me || !me.loggedIn) location.replace("login.html");
+$("types").innerHTML = TYPES.map((t) => `<label><input type="radio" name="wt" value="${t}"><span>${t}</span></label>`).join("");
+document.querySelectorAll('input[name="wt"]').forEach((r) => r.onchange = refresh);
+
+/* ---------- photos: preview, remove, compress ---------- */
+let photos = [], gps = null, busy = false, map = null, marker = null, seq = 0;   // photos: {id, data, ref|null}
+const isNetwork = (e) => /failed to fetch|network|load failed/i.test(e.message);
+function fail(t) { $("msg").textContent = t; $("msg").className = "rp-msg show"; }
+function clearMsg() { $("msg").className = "rp-msg"; }
+function drawPhotos() {
+  $("grid").innerHTML = photos.map((p) => `<div class="rp-ph"><img src="${p.data}" alt="Selected photo"><button type="button" data-id="${p.id}" aria-label="Remove photo" ${busy ? "disabled" : ""}>×</button>${p.ref ? "<b>uploaded</b>" : ""}</div>`).join("");
+  $("grid").querySelectorAll("button").forEach((b) => b.onclick = () => removePhoto(+b.dataset.id));
+  $("pcount").textContent = photos.length + "/" + MAX_PHOTOS; $("cam").disabled = $("pick").disabled = busy || photos.length >= MAX_PHOTOS; refresh();
+}
+async function removePhoto(id) {
+  const p = photos.find((x) => x.id === id); photos = photos.filter((x) => x.id !== id); drawPhotos();
+  if (p && p.ref) EcoAPI.call("/reports/photos", {method: "DELETE", body: p.ref}).catch(() => {});   // frees the cloud copy
+}
+async function compress(file) {
+  let bmp; try { bmp = await createImageBitmap(file, {imageOrientation: "from-image"}); }
+  catch (e) { bmp = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = URL.createObjectURL(file); }); }
+  for (const [max, q] of [[1600, .82], [1280, .7], [1000, .6]]) {
+    const s = Math.min(1, max / Math.max(bmp.width, bmp.height)), c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s); c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const d = c.toDataURL("image/jpeg", q); if (d.length < 2.6e6) return d;     // keeps each request under Vercel's 4.5 MB cap
+  }
+  throw new Error("too big");
+}
+async function addFiles(files) {
+  clearMsg();
+  for (const f of files) {
+    if (photos.length >= MAX_PHOTOS) return fail("You can add up to 5 photos.");
+    if (!/^image\/(jpeg|png|webp)$/.test(f.type)) { fail("Unsupported image format. Please use JPG, PNG or WebP."); continue; }
+    if (f.size > MAX_BYTES) { fail("Photo is larger than 5 MB."); continue; }
+    try { photos.push({id: ++seq, data: await compress(f), ref: null}); drawPhotos(); } catch (e) { fail("We couldn't read that photo. Please try another."); }
+  }
+}
+$("cam").onclick = () => $("fCam").click(); $("pick").onclick = () => $("fPick").click();
+[$("fCam"), $("fPick")].forEach((inp) => inp.onchange = () => { const f = [...inp.files]; inp.value = ""; addFiles(f); });
+
+/* ---------- GPS + map ---------- */
+function paintLoc() {
+  const L_ = $("loc"), low = gps.locationAccuracy > GOOD_ACCURACY;
+  L_.className = "rp-loc " + (low ? "warn" : "ok");
+  L_.innerHTML = `${low ? "⚠ " : ""}Location captured ✓<br>Latitude: ${gps.latitude.toFixed(6)}<br>Longitude: ${gps.longitude.toFixed(6)}<br>Accuracy: ${Math.round(gps.locationAccuracy)} meters${gps.moved ? "<br>Pin moved by you" : ""}`
+    + (low ? "<br><b>Your location accuracy is low. Please move to an open area and tap the button again.</b>" : "");
+}
+function showMap() {
+  if (typeof L === "undefined") return;                       // map is optional; GPS still works
+  $("map").style.display = "block"; $("mapnote").style.display = "block";
+  if (!map) {
+    map = L.map("map").setView([gps.latitude, gps.longitude], 17);
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {maxZoom: 19, attribution: "© OpenStreetMap"}).addTo(map);
+    marker = L.marker([gps.latitude, gps.longitude], {draggable: true}).addTo(map);
+    marker.on("dragend", () => { const p = marker.getLatLng(); gps.latitude = p.lat; gps.longitude = p.lng; gps.moved = true; paintLoc(); });
+  } else { map.setView([gps.latitude, gps.longitude], 17); marker.setLatLng([gps.latitude, gps.longitude]); }
+  setTimeout(() => map.invalidateSize(), 80);
+}
+$("gps").onclick = () => {
+  clearMsg(); const L_ = $("loc"), b = $("gps");
+  const err = (t) => { L_.className = "rp-loc err"; L_.textContent = t; };
+  if (!("geolocation" in navigator)) return err("This browser can't share your location. Try Chrome or Safari.");
+  b.disabled = true; b.textContent = "Getting your location..."; L_.className = "rp-loc";
+  navigator.geolocation.getCurrentPosition((p) => {
+    b.disabled = false; b.textContent = "📍 Use My Current Location again";
+    gps = {latitude: p.coords.latitude, longitude: p.coords.longitude, locationAccuracy: p.coords.accuracy, locationTimestamp: p.timestamp || Date.now(), moved: false};
+    paintLoc(); showMap(); refresh();
+  }, (e) => {
+    b.disabled = false; b.textContent = "📍 Try again"; gps = null; refresh();
+    err(e.code === 1 ? "Location permission was denied. Please enable location permission in your browser settings, then tap “Try again”."
+      : e.code === 3 ? "Getting your location took too long. Please try again, ideally outdoors."
+      : "Unable to determine your location. Please try again.");
+  }, {enableHighAccuracy: true, timeout: 10000, maximumAge: 0});
+};
+
+/* ---------- validity + submit ---------- */
+const type = () => document.querySelector('input[name="wt"]:checked');
+function refresh() {
+  const t = (el, ok, label) => { el.className = ok ? "ok" : ""; el.textContent = (ok ? "✓ " : "○ ") + label; };
+  t($("cp"), photos.length > 0, photos.length ? photos.length + " photo" + (photos.length > 1 ? "s" : "") : "Photo");
+  t($("cl"), !!gps, gps ? "Location captured" : "Location"); t($("ct"), !!type(), "Waste type");
+  $("send").disabled = busy || !(photos.length && gps && type());
+}
+async function uploadAll() {
+  const todo = photos.filter((p) => !p.ref);
+  for (let i = 0; i < todo.length; i++) {
+    $("send").textContent = `Uploading photo ${i + 1} of ${todo.length}...`;
+    const {photo} = await EcoAPI.call("/reports/photos", {method: "POST", body: {photo: todo[i].data}});
+    todo[i].ref = {url: photo.url, key: photo.key}; drawPhotos();
+  }
+}
+$("rf").onsubmit = async (e) => {
+  e.preventDefault(); clearMsg(); if (busy || $("send").disabled) return;
+  if (Date.now() - gps.locationTimestamp > 25 * 60e3) { gps = null; refresh(); return fail("Your location is out of date. Please capture it again."); }
+  busy = true; drawPhotos(); $("send").disabled = true;
+  try {
+    await uploadAll();
+    $("send").textContent = "Submitting...";
+    await EcoAPI.call("/reports", {method: "POST", body: {photos: photos.map((p) => p.ref), wasteType: type().value, description: $("desc").value.trim(),
+      latitude: gps.latitude, longitude: gps.longitude, locationAccuracy: gps.locationAccuracy, locationTimestamp: gps.locationTimestamp}});
+    $("rf").style.display = "none"; $("done").classList.add("show"); loadMine();
+  } catch (err) { fail(isNetwork(err) ? "Network problem. Please check your connection and try again." : /upload|photo/i.test(err.message) ? err.message : (photos.some((p) => !p.ref) ? "Photo upload failed. Please try again." : err.message)); }
+  busy = false; $("send").textContent = "Submit Waste Report"; drawPhotos();
+};
+$("again").onclick = () => { $("rf").reset(); photos = []; gps = null; $("loc").className = "rp-loc"; $("map").style.display = "none"; $("mapnote").style.display = "none"; $("gps").textContent = "📍 Use My Current Location"; drawPhotos(); $("done").classList.remove("show"); $("rf").style.display = ""; scrollTo(0, 0); };
+
+async function loadMine() {
+  try {
+    const {reports} = await EcoAPI.call("/reports");
+    $("my").innerHTML = reports.length ? reports.map((r) => `<div class="rp-item"><img src="${esc(r.photos && r.photos[0] ? r.photos[0].url : r.photoUrl)}" alt="" loading="lazy"><div><b>${esc(r.wasteType)}</b> · ${(r.photos || []).length || 1} photo(s)<br>${new Date(r.createdAt).toLocaleString()}</div><span class="st ${esc(r.status)}">${esc(LABEL[r.status] || r.status)}</span></div>`).join("")
+      : `<p style="color:var(--text-light);font-size:.9rem">You haven't reported anything yet.</p>`;
+  } catch (e) { $("my").innerHTML = `<p style="color:var(--text-light)">${esc(e.message)}</p>`; }
+}
+drawPhotos(); loadMine();
+</script>
+<script src="brand.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

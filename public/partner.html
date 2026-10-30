@@ -1,0 +1,2867 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Partner Dashboard — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+
+    <style>
+        .partner-approval-notice {
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            border: 1px solid #f0d9a8;
+            border-radius: 12px;
+            background: #fff8ea;
+            color: #7a5a12;
+            font-size: .9rem;
+            line-height: 1.5;
+        }
+        .partner-approval-notice.suspended {
+            border-color: #f1c4c2;
+            background: #fdf0ef;
+            color: #8c2b26;
+        }
+        .partner-approval-notice strong { display: block; margin-bottom: 2px; }
+    </style>
+</head>
+
+
+<body class="app-page partner-page">
+
+
+<!-- =====================================================
+     SIDEBAR
+===================================================== -->
+
+<aside
+    class="sidebar"
+    id="partnerSidebar"
+>
+
+    <div class="sidebar-logo">
+
+        <a
+            href="index.html"
+            class="logo"
+        ><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+
+    </div>
+
+
+    <nav class="dashboard-nav">
+
+        <div class="dashboard-nav-label">
+            OPERATIONS
+        </div>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link active"
+            data-partner-section="overview"
+        >
+
+            <span>▦</span>
+
+            Overview
+
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="open"
+        >
+
+            <span>✚</span>
+
+            Open Requests
+
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="pickups"
+        >
+
+            <span>↗</span>
+
+            My Pickups
+
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="history"
+        >
+
+            <span>✓</span>
+
+            History
+
+        </a>
+
+
+        <div class="dashboard-nav-label">
+            ACCOUNT
+        </div>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="profile"
+        >
+
+            <span>♙</span>
+
+            Partner Profile
+
+        </a>
+
+
+        <a
+            href="#"
+            class="dashboard-nav-link"
+            data-partner-section="settings"
+        >
+
+            <span>⚙</span>
+
+            Settings
+
+        </a>
+
+    </nav>
+
+
+    <!-- SIDEBAR USER -->
+
+    <div class="sidebar-bottom">
+
+        <div class="sidebar-user">
+
+            <div class="user-avatar" data-partner-initials>EC</div>
+
+
+            <div>
+
+                <strong data-partner-display-name>Partner</strong>
+
+                <span>
+                    Collection Partner
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <button
+            class="logout-button"
+            id="partnerLogout"
+        >
+            Log out
+        </button>
+
+    </div>
+
+</aside>
+
+
+<!-- =====================================================
+     MOBILE OVERLAY
+===================================================== -->
+
+<div
+    class="sidebar-overlay"
+    id="partnerOverlay"
+></div>
+
+
+<!-- =====================================================
+     MAIN
+===================================================== -->
+
+<div class="app-main">
+
+
+<!-- =====================================================
+     HEADER
+===================================================== -->
+
+<header class="app-header">
+
+    <button
+        class="dashboard-menu-button"
+        id="partnerMenuButton"
+    >
+        ☰
+    </button>
+
+
+    <div class="app-header-right">
+
+        <button
+            class="notification-button"
+        >
+            ◌
+
+            <span></span>
+
+        </button>
+
+
+        <div class="header-business">
+
+            <div class="user-avatar small" data-partner-initials>EC</div>
+
+
+            <div>
+
+                <strong data-partner-display-name>Partner</strong>
+
+                <small>
+                    Collection Partner
+                </small>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</header>
+
+
+<!-- =====================================================
+     CONTENT
+===================================================== -->
+
+<main class="dashboard-content">
+
+
+<div
+    class="partner-approval-notice"
+    id="partnerApprovalNotice"
+    hidden
+></div>
+
+
+
+<!-- =====================================================
+     OVERVIEW
+===================================================== -->
+
+<section
+    class="dashboard-section active"
+    id="partner-overview"
+>
+
+
+    <div class="dashboard-welcome">
+
+        <div>
+
+            <span class="dashboard-date">
+                COLLECTION PARTNER
+            </span>
+
+
+            <h1>
+                Ready for today's route.
+            </h1>
+
+
+            <p>
+                Manage your assigned E-arthchakra collections
+                from one place.
+            </p>
+
+        </div>
+
+
+        <button
+            class="btn btn-primary"
+            id="partnerRefresh"
+        >
+            ↻ Refresh
+        </button>
+
+    </div>
+
+
+    <!-- =================================================
+         STATS
+    ================================================== -->
+
+    <div class="dashboard-stat-grid">
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    TODAY
+                </span>
+
+                <div class="stat-icon">
+                    ↗
+                </div>
+
+            </div>
+
+
+            <strong id="partnerTodayCount">
+                0
+            </strong>
+
+
+            <small>
+                pickups scheduled
+            </small>
+
+
+            <div class="stat-change neutral">
+                Today's route
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    ASSIGNED
+                </span>
+
+                <div class="stat-icon">
+                    !
+                </div>
+
+            </div>
+
+
+            <strong id="partnerAssignedCount">
+                0
+            </strong>
+
+
+            <small>
+                pickups to complete
+            </small>
+
+
+            <div class="stat-change positive">
+                Ready for action
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    IN PROGRESS
+                </span>
+
+                <div class="stat-icon">
+                    →
+                </div>
+
+            </div>
+
+
+            <strong id="partnerProgressCount">
+                0
+            </strong>
+
+
+            <small>
+                active collections
+            </small>
+
+
+            <div class="stat-change neutral">
+                Currently collecting
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-stat-card">
+
+            <div class="stat-card-top">
+
+                <span>
+                    COMPLETED
+                </span>
+
+                <div class="stat-icon">
+                    ✓
+                </div>
+
+            </div>
+
+
+            <strong id="partnerCompletedCount">
+                0
+            </strong>
+
+
+            <small>
+                completed pickups
+            </small>
+
+
+            <div class="stat-change positive">
+                All time
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================================
+         TODAY'S ROUTE
+    ================================================== -->
+
+    <div class="dashboard-panel">
+
+
+        <div class="panel-header">
+
+            <div>
+
+                <span class="panel-label">
+                    TODAY'S ROUTE
+                </span>
+
+
+                <h2>
+                    Collection schedule
+                </h2>
+
+            </div>
+
+
+            <a
+                href="#"
+                data-partner-link="pickups"
+            >
+                View all
+            </a>
+
+        </div>
+
+
+        <div
+            class="partner-route-list"
+            id="partnerRouteList"
+        >
+
+            <div class="partner-empty-state">
+
+                No pickups assigned yet.
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</section>
+
+
+<!-- =====================================================
+     OPEN REQUESTS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-open"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                NEW REQUESTS
+            </span>
+
+
+            <h1>
+                Open Requests
+            </h1>
+
+
+            <p>
+                Pickup requests from businesses that no partner has taken yet.
+                Accept one to add it to your pickups.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+        <div class="activity-table-wrapper">
+
+            <table class="activity-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            REQUESTED
+                        </th>
+
+                        <th>
+                            BUSINESS
+                        </th>
+
+                        <th>
+                            WASTE
+                        </th>
+
+                        <th>
+                            QUANTITY
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            ACTION
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="partnerOpenTable"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="6"
+                            style="
+                                text-align:center;
+                                padding:40px;
+                                color:#8a958c;
+                            "
+                        >
+
+                            No open requests right now.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     MY PICKUPS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-pickups"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                COLLECTION OPERATIONS
+            </span>
+
+
+            <h1>
+                My Pickups
+            </h1>
+
+
+            <p>
+                Pickups assigned to your collection team.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+
+        <div class="admin-search-row">
+
+            <input
+                type="search"
+                id="partnerSearch"
+                placeholder="Search business..."
+            >
+
+
+            <select id="partnerStatusFilter">
+
+                <option value="all">
+                    All statuses
+                </option>
+
+                <option value="Assigned">
+                    Assigned
+                </option>
+
+                <option value="In Progress">
+                    In Progress
+                </option>
+
+                <option value="Completed">
+                    Completed
+                </option>
+
+            </select>
+
+        </div>
+
+
+        <div class="activity-table-wrapper">
+
+            <table class="activity-table">
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            DATE
+                        </th>
+
+                        <th>
+                            BUSINESS
+                        </th>
+
+                        <th>
+                            WASTE
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            TIME
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                        <th>
+                            ACTION
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="partnerPickupTable"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="7"
+                            style="
+                                text-align:center;
+                                padding:40px;
+                                color:#8a958c;
+                            "
+                        >
+
+                            No pickups assigned.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     HISTORY
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-history"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                COMPLETED COLLECTIONS
+            </span>
+
+
+            <h1>
+                History
+            </h1>
+
+
+            <p>
+                Your completed E-arthchakra pickup history.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+        <div class="activity-table-wrapper">
+
+            <table class="activity-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            DATE
+                        </th>
+
+                        <th>
+                            BUSINESS
+                        </th>
+
+                        <th>
+                            MATERIAL
+                        </th>
+
+                        <th>
+                            LOCATION
+                        </th>
+
+                        <th>
+                            STATUS
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody
+                    id="partnerHistoryTable"
+                >
+
+                    <tr>
+
+                        <td
+                            colspan="5"
+                            style="
+                                text-align:center;
+                                padding:40px;
+                                color:#8a958c;
+                            "
+                        >
+
+                            No completed pickups yet.
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     PROFILE
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-profile"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                PARTNER ACCOUNT
+            </span>
+
+
+            <h1>
+                Partner Profile
+            </h1>
+
+
+            <p>
+                Your E-arthchakra collection partner information.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="settings-grid">
+
+
+        <div class="dashboard-panel">
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        BUSINESS
+                    </span>
+
+                    <h2>
+                        Partner information
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="settings-form">
+
+
+                <div class="form-group">
+
+                    <label>
+                        Partner name
+                    </label>
+
+                    <input
+                        type="text"
+                        id="profilePartnerName"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Service area
+                    </label>
+
+                    <input
+                        type="text"
+                        id="profileCity"
+                        readonly
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label>
+                        Contact number
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="profilePhone"
+                        readonly
+                    >
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <div class="dashboard-panel">
+
+
+            <div class="panel-header">
+
+                <div>
+
+                    <span class="panel-label">
+                        NETWORK ROLE
+                    </span>
+
+
+                    <h2>
+                        Collection partner
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+            <div class="partner-role-card">
+
+                <div class="partner-role-icon">
+                    ↗
+                </div>
+
+
+                <strong>
+                    E-arthchakra Collection Network
+                </strong>
+
+
+                <p>
+                    You receive collection assignments from
+                    E-arthchakra and complete pickups from
+                    businesses in your service area.
+                </p>
+
+
+                <span
+                    class="status-badge completed"
+                    id="profilePartnerStatus"
+                >
+                    Active Partner
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</section>
+
+
+<!-- =====================================================
+     SETTINGS
+===================================================== -->
+
+<section
+    class="dashboard-section"
+    id="partner-settings"
+>
+
+
+    <div class="dashboard-page-header">
+
+        <div>
+
+            <span class="dashboard-date">
+                SETTINGS
+            </span>
+
+
+            <h1>
+                Settings
+            </h1>
+
+
+            <p>
+                Manage your collection preferences.
+            </p>
+
+        </div>
+
+    </div>
+
+
+    <div class="dashboard-panel">
+
+
+        <div class="setting-toggle">
+
+            <div>
+
+                <strong>
+                    Pickup notifications
+                </strong>
+
+                <span>
+                    Receive new pickup assignments.
+                </span>
+
+            </div>
+
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    checked
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+
+        <div class="setting-toggle">
+
+            <div>
+
+                <strong>
+                    Route reminders
+                </strong>
+
+                <span>
+                    Receive reminders before scheduled pickups.
+                </span>
+
+            </div>
+
+
+            <label class="switch">
+
+                <input
+                    type="checkbox"
+                    checked
+                >
+
+                <span class="slider"></span>
+
+            </label>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+</main>
+
+</div>
+
+
+<!-- =====================================================
+     JAVASCRIPT
+===================================================== -->
+
+<script src="api.js"></script>
+<script>
+
+
+/* =====================================================
+   PARTNER AUTHENTICATION
+===================================================== */
+
+
+/*
+ * For the current prototype, the partner dashboard
+ * is accessible when the logged-in role is "partner".
+ */
+
+const partnerUser =
+    JSON.parse(
+        localStorage.getItem(
+            "earthchakra_user"
+        )
+    );
+
+
+/*
+ * IMPORTANT:
+ *
+ * During development, if you have not yet added
+ * "Partner" to login.html, this check will redirect.
+ *
+ * We will connect Partner login in the next step.
+ */
+
+if (
+    !partnerUser ||
+    !partnerUser.loggedIn ||
+    partnerUser.role !== "partner"
+) {
+
+    window.location.href =
+        "partner-login.html";
+
+}
+
+
+/* =====================================================
+   NAVIGATION
+===================================================== */
+
+const partnerLinks =
+    document.querySelectorAll(
+        "[data-partner-section]"
+    );
+
+
+const partnerSections =
+    document.querySelectorAll(
+        ".dashboard-section"
+    );
+
+
+function showPartnerSection(
+    sectionName
+) {
+
+    partnerSections.forEach(
+        section => {
+
+            section.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    partnerLinks.forEach(
+        link => {
+
+            link.classList.remove(
+                "active"
+            );
+
+        }
+    );
+
+
+    const section =
+        document.getElementById(
+            `partner-${sectionName}`
+        );
+
+
+    const link =
+        document.querySelector(
+            `[data-partner-section="${sectionName}"]`
+        );
+
+
+    if (section) {
+
+        section.classList.add(
+            "active"
+        );
+
+    }
+
+
+    if (link) {
+
+        link.classList.add(
+            "active"
+        );
+
+    }
+
+
+    if (
+        sectionName ===
+        "open"
+    ) {
+
+        loadOpenRequests();
+
+    }
+
+
+    if (
+        sectionName ===
+        "pickups"
+    ) {
+
+        loadPartnerPickups();
+
+    }
+
+
+    if (
+        sectionName ===
+        "history"
+    ) {
+
+        loadPartnerHistory();
+
+    }
+
+}
+
+
+partnerLinks.forEach(
+    link => {
+
+        link.addEventListener(
+            "click",
+            event => {
+
+                event.preventDefault();
+
+
+                showPartnerSection(
+                    link.dataset.partnerSection
+                );
+
+            }
+        );
+
+    }
+);
+
+
+/* =====================================================
+   INTERNAL LINKS
+===================================================== */
+
+document
+    .querySelectorAll(
+        "[data-partner-link]"
+    )
+    .forEach(
+        link => {
+
+            link.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+
+                    showPartnerSection(
+                        link.dataset.partnerLink
+                    );
+
+                }
+            );
+
+        }
+    );
+
+
+/* =====================================================
+   MOBILE SIDEBAR
+===================================================== */
+
+const partnerSidebar =
+    document.getElementById(
+        "partnerSidebar"
+    );
+
+
+const partnerOverlay =
+    document.getElementById(
+        "partnerOverlay"
+    );
+
+
+const partnerMenuButton =
+    document.getElementById(
+        "partnerMenuButton"
+    );
+
+
+if (partnerMenuButton) {
+
+    partnerMenuButton.addEventListener(
+        "click",
+        () => {
+
+            partnerSidebar.classList.add(
+                "open"
+            );
+
+
+            partnerOverlay.classList.add(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+if (partnerOverlay) {
+
+    partnerOverlay.addEventListener(
+        "click",
+        () => {
+
+            partnerSidebar.classList.remove(
+                "open"
+            );
+
+
+            partnerOverlay.classList.remove(
+                "show"
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOGOUT
+===================================================== */
+
+const partnerLogout =
+    document.getElementById(
+        "partnerLogout"
+    );
+
+
+if (partnerLogout) {
+
+    partnerLogout.addEventListener(
+        "click",
+        () => {
+
+            EcoAPI.logout();
+
+
+            window.location.href =
+                "partner-login.html";
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   GET REQUESTS
+===================================================== */
+
+function getPartnerRequests() {
+
+    return EcoAPI.getRequests();
+
+}
+
+
+/* =====================================================
+   PARTNER NAME
+===================================================== */
+
+function getPartnerName() {
+
+    /*
+     * The partner name comes from the signed-in partner account.
+     */
+
+    return (partnerUser && partnerUser.partnerName) || "";
+
+}
+
+
+/* =====================================================
+   FILTER PARTNER REQUESTS
+===================================================== */
+
+function getAssignedPartnerRequests() {
+
+    const requests =
+        getPartnerRequests();
+
+
+    const partnerName =
+        getPartnerName();
+
+
+    return requests.filter(
+        request =>
+            request.partner ===
+            partnerName
+    );
+
+}
+
+
+/* =====================================================
+   LOAD PARTNER OVERVIEW
+===================================================== */
+
+function loadPartnerOverview() {
+
+    const requests =
+        getAssignedPartnerRequests();
+
+
+    const today =
+        new Date();
+
+
+    const todayString =
+        today.toISOString()
+            .split("T")[0];
+
+
+    /*
+     * Today's pickups.
+     */
+
+    const todayRequests =
+        requests.filter(
+            request =>
+                request.scheduledDate ===
+                todayString
+        );
+
+
+    /*
+     * Assigned.
+     */
+
+    const assigned =
+        requests.filter(
+            request =>
+                request.status ===
+                "Assigned"
+        );
+
+
+    /*
+     * In progress.
+     */
+
+    const inProgress =
+        requests.filter(
+            request =>
+                request.status ===
+                "In Progress"
+        );
+
+
+    /*
+     * Completed.
+     */
+
+    const completed =
+        requests.filter(
+            request =>
+                request.status ===
+                "Completed"
+        );
+
+
+    const todayElement =
+        document.getElementById(
+            "partnerTodayCount"
+        );
+
+
+    const assignedElement =
+        document.getElementById(
+            "partnerAssignedCount"
+        );
+
+
+    const progressElement =
+        document.getElementById(
+            "partnerProgressCount"
+        );
+
+
+    const completedElement =
+        document.getElementById(
+            "partnerCompletedCount"
+        );
+
+
+    if (todayElement) {
+
+        todayElement.textContent =
+            todayRequests.length;
+
+    }
+
+
+    if (assignedElement) {
+
+        assignedElement.textContent =
+            assigned.length;
+
+    }
+
+
+    if (progressElement) {
+
+        progressElement.textContent =
+            inProgress.length;
+
+    }
+
+
+    if (completedElement) {
+
+        completedElement.textContent =
+            completed.length;
+
+    }
+
+
+    /*
+     * Load today's route.
+     */
+
+    loadPartnerRoute(
+        todayRequests
+    );
+
+}
+
+
+/* =====================================================
+   PARTNER ROUTE
+===================================================== */
+
+function loadPartnerRoute(
+    requests
+) {
+
+    const container =
+        document.getElementById(
+            "partnerRouteList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML = "";
+
+
+    /*
+     * If there are no pickups today,
+     * show all active scheduled pickups.
+     *
+     * This makes testing easier.
+     */
+
+    let routeRequests =
+        requests;
+
+
+    if (
+        routeRequests.length === 0
+    ) {
+
+        routeRequests =
+            getAssignedPartnerRequests()
+                .filter(
+                    request =>
+                        request.status !==
+                        "Completed"
+                )
+                .slice(
+                    0,
+                    5
+                );
+
+    }
+
+
+    if (
+        routeRequests.length === 0
+    ) {
+
+        container.innerHTML = `
+
+            <div class="partner-empty-state">
+
+                No pickups assigned yet.
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    routeRequests.forEach(
+        request => {
+
+            const item =
+                document.createElement(
+                    "div"
+                );
+
+
+            item.className =
+                "partner-route-item";
+
+
+            const waste =
+                request.waste &&
+                request.waste.length
+                    ? request.waste.join(
+                        " · "
+                    )
+                    : "Waste collection";
+
+
+            const time =
+                request.scheduledTime ||
+                "Time not set";
+
+
+            item.innerHTML = `
+
+                <div class="route-time">
+
+                    ${escapePartnerHTML(
+                        time
+                    )}
+
+                </div>
+
+
+                <div class="route-line"></div>
+
+
+                <div class="route-main">
+
+                    <strong>
+
+                        ${escapePartnerHTML(
+                            request.businessName ||
+                            "Business"
+                        )}
+
+                    </strong>
+
+
+                    <span>
+
+                        ${escapePartnerHTML(
+                            request.city ||
+                            "Location not set"
+                        )}
+
+                        ${partnerMapLink(request)}
+
+                    </span>
+
+
+                    <small>
+
+                        ${escapePartnerHTML(
+                            waste
+                        )}
+
+                    </small>
+
+                </div>
+
+
+                <span
+                    class="status-badge ${
+                        partnerStatusClass(
+                            request.status
+                        )
+                    }"
+                >
+
+                    ${escapePartnerHTML(
+                        request.status ||
+                        "Assigned"
+                    )}
+
+                </span>
+
+            `;
+
+
+            container.appendChild(
+                item
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   LOAD ALL PARTNER PICKUPS
+===================================================== */
+
+function loadPartnerPickups() {
+
+    const requests =
+        getAssignedPartnerRequests();
+
+
+    const tbody =
+        document.getElementById(
+            "partnerPickupTable"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    if (
+        requests.length === 0
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="7"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#8a958c;
+                    "
+                >
+
+                    No pickups assigned to you.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    /*
+     * Newest first.
+     */
+
+    requests.sort(
+        (a, b) => {
+
+            return new Date(
+                b.submittedAt
+            ) -
+            new Date(
+                a.submittedAt
+            );
+
+        }
+    );
+
+
+    requests.forEach(
+        request => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const date =
+                request.scheduledDate
+                    ? new Date(
+                        request.scheduledDate
+                    ).toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "2-digit",
+                            month: "short"
+                        }
+                    )
+                    : new Date(
+                        request.submittedAt
+                    ).toLocaleDateString(
+                        "en-IN",
+                        {
+                            day: "2-digit",
+                            month: "short"
+                        }
+                    );
+
+
+            const waste =
+                request.waste &&
+                request.waste.length
+                    ? request.waste.join(
+                        " · "
+                    )
+                    : "—";
+
+
+            const time =
+                request.scheduledTime ||
+                "—";
+
+
+            let actionHTML =
+                "";
+
+
+            if (
+                request.status ===
+                "Assigned"
+            ) {
+
+                actionHTML = `
+
+                    <button
+                        class="partner-action-btn"
+                        data-action="start"
+                        data-request-id="${request.id}"
+                    >
+                        Start Pickup
+                    </button>
+
+                `;
+
+            }
+
+
+            else if (
+                request.status ===
+                "In Progress"
+            ) {
+
+                actionHTML = `
+
+                    <button
+                        class="partner-action-btn"
+                        data-action="complete"
+                        data-request-id="${request.id}"
+                    >
+                        Mark Collected
+                    </button>
+
+                `;
+
+            }
+
+
+            else {
+
+                actionHTML = `
+
+                    <span
+                        style="
+                            color:#8a958c;
+                            font-size:.55rem;
+                        "
+                    >
+                        Completed
+                    </span>
+
+                `;
+
+            }
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        date
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <strong>
+
+                        ${escapePartnerHTML(
+                            request.businessName ||
+                            "Business"
+                        )}
+
+                    </strong>
+
+
+                    <small
+                        style="
+                            display:block;
+                            margin-top:4px;
+                            color:#8a958c;
+                            font-size:.5rem;
+                        "
+                    >
+
+                        ${escapePartnerHTML(
+                            request.id
+                        )}
+
+                    </small>
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        waste
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        request.city ||
+                        "—"
+                    )}
+
+                    ${partnerMapLink(request)}
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        time
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    <span
+                        class="status-badge ${
+                            partnerStatusClass(
+                                request.status
+                            )
+                        }"
+                    >
+
+                        ${escapePartnerHTML(
+                            request.status
+                        )}
+
+                    </span>
+
+                </td>
+
+
+                <td>
+
+                    ${actionHTML}
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+
+    /*
+     * Add action listeners.
+     */
+
+    document
+        .querySelectorAll(
+            ".partner-action-btn"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        const requestId =
+                            this.dataset.requestId;
+
+
+                        const action =
+                            this.dataset.action;
+
+
+                        if (
+                            action ===
+                            "start"
+                        ) {
+
+                            updatePartnerStatus(
+                                requestId,
+                                "In Progress"
+                            );
+
+                        }
+
+
+                        if (
+                            action ===
+                            "complete"
+                        ) {
+
+                            updatePartnerStatus(
+                                requestId,
+                                "Completed"
+                            );
+
+                        }
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =====================================================
+   UPDATE PARTNER STATUS
+===================================================== */
+
+function updatePartnerStatus(
+    requestId,
+    newStatus
+) {
+
+    const requests =
+        getPartnerRequests();
+
+
+    const request =
+        requests.find(
+            item =>
+                item.id ===
+                requestId
+        );
+
+
+    if (!request) {
+
+        alert(
+            "Pickup request not found."
+        );
+
+        return;
+
+    }
+
+
+    request.status =
+        newStatus;
+
+
+    request.updatedAt =
+        new Date().toISOString();
+
+
+    EcoAPI.saveRequest(request);
+
+
+    /*
+     * Refresh everything.
+     */
+
+    loadPartnerOverview();
+
+    loadPartnerPickups();
+
+    loadPartnerHistory();
+
+
+    /*
+     * User feedback.
+     */
+
+    if (
+        newStatus ===
+        "In Progress"
+    ) {
+
+        alert(
+            "Pickup started."
+        );
+
+    }
+
+
+    if (
+        newStatus ===
+        "Completed"
+    ) {
+
+        alert(
+            "Pickup marked as collected."
+        );
+
+    }
+
+}
+
+
+/* =====================================================
+   HISTORY
+===================================================== */
+
+function loadPartnerHistory() {
+
+    const requests =
+        getAssignedPartnerRequests()
+            .filter(
+                request =>
+                    request.status ===
+                    "Completed"
+            );
+
+
+    const tbody =
+        document.getElementById(
+            "partnerHistoryTable"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    tbody.innerHTML = "";
+
+
+    if (
+        requests.length === 0
+    ) {
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#8a958c;
+                    "
+                >
+
+                    No completed pickups yet.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    requests.forEach(
+        request => {
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            const date =
+                new Date(
+                    request.updatedAt ||
+                    request.submittedAt
+                );
+
+
+            const waste =
+                request.waste &&
+                request.waste.length
+                    ? request.waste.join(
+                        " · "
+                    )
+                    : "—";
+
+
+            row.innerHTML = `
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        date.toLocaleDateString(
+                            "en-IN",
+                            {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric"
+                            }
+                        )
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        request.businessName ||
+                        "Business"
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        waste
+                    )}
+
+                </td>
+
+
+                <td>
+
+                    ${escapePartnerHTML(
+                        request.city ||
+                        "—"
+                    )}
+
+                    ${partnerMapLink(request)}
+
+                </td>
+
+
+                <td>
+
+                    <span class="status-badge completed">
+
+                        Completed
+
+                    </span>
+
+                </td>
+
+            `;
+
+
+            tbody.appendChild(
+                row
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   STATUS CLASS
+===================================================== */
+
+function partnerStatusClass(
+    status
+) {
+
+    if (
+        status ===
+        "Completed"
+    ) {
+
+        return "completed";
+
+    }
+
+
+    if (
+        status ===
+        "In Progress"
+    ) {
+
+        return "assigned-badge";
+
+    }
+
+
+    if (
+        status ===
+        "Assigned"
+    ) {
+
+        return "scheduled";
+
+    }
+
+
+    return "pending-badge";
+
+}
+
+
+/* =====================================================
+   PICKUP LOCATION
+===================================================== */
+
+/*
+ * "Navigate" link to the exact GPS spot the customer captured.
+ * Older pickups have no coordinates, so this returns nothing for them.
+ */
+
+function partnerMapLink(request) {
+
+    if (
+        typeof request.latitude !== "number" ||
+        typeof request.longitude !== "number"
+    ) {
+        return "";
+    }
+
+    const coords =
+        `${request.latitude.toFixed(6)},${request.longitude.toFixed(6)}`;
+
+    return `<br><a href="https://www.google.com/maps/dir/?api=1&destination=${coords}" target="_blank" rel="noopener" style="font-size:.8rem;font-weight:700;color:var(--green-800,#18532f)">📍 Navigate${request.locationSource === "manual" ? " (pin set by customer)" : ""}</a>`;
+
+}
+
+
+/* =====================================================
+   HTML SAFETY
+===================================================== */
+
+function escapePartnerHTML(
+    value
+) {
+
+    if (
+        value === null ||
+        value === undefined
+    ) {
+
+        return "";
+
+    }
+
+
+    return String(value)
+        .replace(
+            /&/g,
+            "&amp;"
+        )
+        .replace(
+            /</g,
+            "&lt;"
+        )
+        .replace(
+            />/g,
+            "&gt;"
+        )
+        .replace(
+            /"/g,
+            "&quot;"
+        )
+        .replace(
+            /'/g,
+            "&#039;"
+        );
+
+}
+
+
+/* =====================================================
+   REFRESH
+===================================================== */
+
+const partnerRefresh =
+    document.getElementById(
+        "partnerRefresh"
+    );
+
+
+if (partnerRefresh) {
+
+    partnerRefresh.addEventListener(
+        "click",
+        () => {
+
+            loadPartnerOverview();
+
+            loadPartnerPickups();
+
+            loadPartnerHistory();
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+const partnerSearch =
+    document.getElementById(
+        "partnerSearch"
+    );
+
+
+if (partnerSearch) {
+
+    partnerSearch.addEventListener(
+        "input",
+        function () {
+
+            const search =
+                this.value
+                    .toLowerCase();
+
+
+            document
+                .querySelectorAll(
+                    "#partnerPickupTable tr"
+                )
+                .forEach(
+                    row => {
+
+                        row.style.display =
+                            row.textContent
+                                .toLowerCase()
+                                .includes(
+                                    search
+                                )
+                                ? ""
+                                : "none";
+
+                    }
+                );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   ACCOUNT DETAILS + APPROVAL STATUS
+===================================================== */
+
+function applyPartnerAccount() {
+
+    if (!partnerUser) {
+        return;
+    }
+
+
+    const name =
+        partnerUser.partnerName ||
+        partnerUser.name ||
+        "Partner";
+
+
+    const initials =
+        name
+            .split(/\s+/)
+            .filter(Boolean)
+            .slice(0, 2)
+            .map(word => word[0].toUpperCase())
+            .join("");
+
+
+    document
+        .querySelectorAll("[data-partner-display-name]")
+        .forEach(el => { el.textContent = name; });
+
+    document
+        .querySelectorAll("[data-partner-initials]")
+        .forEach(el => { el.textContent = initials || "P"; });
+
+
+    document.getElementById("profilePartnerName").value = name;
+    document.getElementById("profileCity").value = partnerUser.city || "";
+    document.getElementById("profilePhone").value = partnerUser.phone || "";
+
+
+    const status =
+        partnerUser.partnerStatus ||
+        "approved";
+
+
+    const badge =
+        document.getElementById("profilePartnerStatus");
+
+    badge.textContent = {
+        approved: "Active Partner",
+        pending: "Awaiting Approval",
+        suspended: "Suspended"
+    }[status];
+
+    badge.className =
+        "status-badge " +
+        (status === "approved" ? "completed" : "pending-badge");
+
+
+    const notice =
+        document.getElementById("partnerApprovalNotice");
+
+    if (status === "pending") {
+
+        notice.innerHTML =
+            "<strong>Your partner account is waiting for approval.</strong>" +
+            "Our team will review your details shortly. Once approved, new pickup requests will appear under Open Requests.";
+        notice.className = "partner-approval-notice";
+        notice.hidden = false;
+
+    } else if (status === "suspended") {
+
+        notice.innerHTML =
+            "<strong>Your partner account is suspended.</strong>" +
+            "Please contact E-arthchakra to restore access.";
+        notice.className = "partner-approval-notice suspended";
+        notice.hidden = false;
+
+    } else {
+
+        notice.hidden = true;
+
+    }
+
+}
+
+
+/* =====================================================
+   OPEN REQUESTS (not yet taken by any partner)
+===================================================== */
+
+function loadOpenRequests() {
+
+    const tbody =
+        document.getElementById(
+            "partnerOpenTable"
+        );
+
+
+    if (!tbody) {
+        return;
+    }
+
+
+    const requests =
+        getPartnerRequests()
+            .filter(
+                request =>
+                    request.status === "Pending" &&
+                    !request.partner
+            )
+            .sort(
+                (a, b) =>
+                    new Date(b.submittedAt) -
+                    new Date(a.submittedAt)
+            );
+
+
+    if (requests.length === 0) {
+
+        const message =
+            partnerUser && partnerUser.partnerStatus === "approved"
+                ? "No open requests right now."
+                : "Open requests appear here once your account is approved.";
+
+        tbody.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="6"
+                    style="
+                        text-align:center;
+                        padding:40px;
+                        color:#8a958c;
+                    "
+                >
+
+                    ${message}
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    tbody.innerHTML =
+        requests
+            .map(
+                request => {
+
+                    const date =
+                        new Date(
+                            request.submittedAt
+                        ).toLocaleDateString(
+                            "en-IN",
+                            {
+                                day: "2-digit",
+                                month: "short"
+                            }
+                        );
+
+
+                    const waste =
+                        request.waste &&
+                        request.waste.length
+                            ? request.waste.join(" · ")
+                            : "—";
+
+
+                    return `
+
+                        <tr>
+
+                            <td>
+                                ${escapePartnerHTML(date)}
+                            </td>
+
+                            <td>
+
+                                <strong>
+                                    ${escapePartnerHTML(request.businessName || "Business")}
+                                </strong>
+
+                                <small
+                                    style="
+                                        display:block;
+                                        margin-top:4px;
+                                        color:#8a958c;
+                                        font-size:.5rem;
+                                    "
+                                >
+                                    ${escapePartnerHTML(request.frequency || "")}
+                                </small>
+
+                            </td>
+
+                            <td>
+                                ${escapePartnerHTML(waste)}
+                            </td>
+
+                            <td>
+                                ${escapePartnerHTML(request.quantity || "—")}
+                            </td>
+
+                            <td>
+                                ${escapePartnerHTML(request.city || "—")}
+                                ${partnerMapLink(request)}
+                            </td>
+
+                            <td>
+
+                                <button
+                                    class="partner-action-btn"
+                                    data-accept-id="${escapePartnerHTML(request.id)}"
+                                >
+                                    Accept
+                                </button>
+
+                            </td>
+
+                        </tr>
+
+                    `;
+
+                }
+            )
+            .join("");
+
+
+    tbody
+        .querySelectorAll("[data-accept-id]")
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => acceptOpenRequest(button)
+                );
+
+            }
+        );
+
+}
+
+
+async function acceptOpenRequest(button) {
+
+    button.disabled = true;
+
+    try {
+
+        await EcoAPI.acceptRequest(
+            button.dataset.acceptId
+        );
+
+        alert(
+            "Pickup accepted. You'll find it under My Pickups."
+        );
+
+    } catch (error) {
+
+        alert(error.message);
+
+        await EcoAPI.loadRequests();
+
+    }
+
+    refreshPartnerViews();
+
+}
+
+
+/* =====================================================
+   INITIAL LOAD
+===================================================== */
+
+function refreshPartnerViews() {
+
+    loadPartnerOverview();
+
+    loadOpenRequests();
+
+    loadPartnerPickups();
+
+    loadPartnerHistory();
+
+}
+
+applyPartnerAccount();
+
+// Re-read the account first: the admin may have approved it since the last login.
+EcoAPI.refreshUser()
+    .then((user) => {
+        Object.assign(partnerUser, user);
+        applyPartnerAccount();
+    })
+    .catch((error) => console.error(error))
+    .then(() => EcoAPI.loadRequests())
+    .then(refreshPartnerViews)
+    .catch((error) => console.error(error));
+
+
+/*
+ * Re-fetch every 15 seconds.
+ */
+
+setInterval(
+    () => {
+        EcoAPI.loadRequests()
+            .then(refreshPartnerViews)
+            .catch((error) => console.error(error));
+    },
+    15000
+);
+
+
+</script>

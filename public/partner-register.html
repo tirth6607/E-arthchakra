@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Become a Partner — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+</head>
+
+
+<body class="login-page">
+
+
+    <!-- HEADER -->
+
+    <header class="login-header">
+
+        <div class="container">
+
+            <a
+                href="index.html"
+                class="logo"
+            ><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+
+        </div>
+
+    </header>
+
+
+    <!-- REGISTER -->
+
+    <main class="login-main register-main">
+
+        <div class="register-wrap">
+
+
+            <!-- LEFT: BRAND PANEL -->
+
+            <aside class="register-aside">
+
+                <div class="eyebrow">
+                    PARTNER PORTAL
+                </div>
+
+                <h1>
+                    Become a collection partner.
+                </h1>
+
+                <p class="register-lead">
+                    Register your collection team and start
+                    receiving pickup requests from businesses.
+                </p>
+
+                <ul class="register-benefits">
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Receive pickup requests</strong>
+                            <span>New requests appear on your dashboard instantly.</span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Accept the jobs you want</strong>
+                            <span>Take open requests or get assigned by our team.</span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Quick verification</strong>
+                            <span>Our team reviews and approves new partners.</span>
+                        </div>
+                    </li>
+
+                </ul>
+
+                <p class="register-aside-foot">
+                    Already registered?
+                    <a href="partner-login.html">Sign in</a>
+                </p>
+
+            </aside>
+
+
+            <!-- RIGHT: FORM CARD -->
+
+            <div class="login-card register-card">
+
+                <div class="login-card-header">
+
+                    <h2>
+                        Create account
+                    </h2>
+
+                    <p>
+                        We'll review your details and approve your account.
+                    </p>
+
+                </div>
+
+
+                <form id="partnerRegisterForm" novalidate>
+
+
+                    <div class="form-section-title">
+                        About you
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="name">
+                                Full name <em>*</em>
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                Phone number <em>*</em>
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                placeholder="+91 XXXXX XXXXX"
+                                autocomplete="tel"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="email">
+                                Email <em>*</em>
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="you@company.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-section-title">
+                        Your collection business
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="partnerName">
+                                Company / team name <em>*</em>
+                            </label>
+                            <input
+                                type="text"
+                                id="partnerName"
+                                placeholder="e.g. Green Pickup Services"
+                                autocomplete="organization"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="city">
+                                Service city <em>*</em>
+                            </label>
+                            <input
+                                type="text"
+                                id="city"
+                                placeholder="City you collect in"
+                                autocomplete="address-level2"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-section-title">
+                        Secure your account
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password <em>*</em>
+                        </label>
+
+                        <div class="password-input">
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="At least 8 characters"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                aria-label="Show password"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                        <div class="strength">
+                            <div class="strength-bar">
+                                <span id="strengthFill"></span>
+                            </div>
+                            <small id="strengthText">
+                                Use 8+ characters with letters and numbers.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="login-error"
+                        id="registerMessage"
+                    >
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-large login-submit"
+                    >
+                        Register as Partner
+                        <span>→</span>
+                    </button>
+
+
+                    <p class="login-terms">
+                        By creating an account, you agree to E-arthchakra's
+                        terms of service and privacy policy.
+                    </p>
+
+
+                </form>
+
+
+                <p class="register-mobile-signin">
+                    Already have an account?
+                    <a href="partner-login.html">Sign in</a>
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="login-back"
+        >
+            ← Back to website
+        </a>
+
+
+    </main>
+
+
+    <script src="api.js"></script>
+
+    <script>
+
+
+        const registerForm =
+            document.getElementById("partnerRegisterForm");
+
+
+        const registerMessage =
+            document.getElementById("registerMessage");
+
+
+        registerForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const value = (id) => document.getElementById(id).value.trim();
+
+            const fields = {
+                name: value("name"),
+                partnerName: value("partnerName"),
+                email: value("email"),
+                phone: value("phone"),
+                city: value("city"),
+                password: document.getElementById("password").value
+            };
+
+            if (Object.values(fields).some((v) => !v)) {
+                registerMessage.textContent = "Please complete every field.";
+                registerMessage.classList.add("show");
+                return;
+            }
+
+            if (fields.password.length < 8) {
+                registerMessage.textContent = "Password must be at least 8 characters.";
+                registerMessage.classList.add("show");
+                return;
+            }
+
+            const submitButton = registerForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+
+            try {
+                await EcoAPI.registerPartner(fields);
+                registerMessage.textContent = "Partner account created. Opening your dashboard...";
+                registerMessage.classList.add("show");
+                setTimeout(() => { window.location.href = "partner.html"; }, 900);
+            } catch (error) {
+                registerMessage.textContent = error.message;
+                registerMessage.classList.add("show");
+                submitButton.disabled = false;
+            }
+        });
+
+
+
+        /* ---------- show / hide password ---------- */
+
+        const pwInput = document.getElementById("password");
+        const pwToggle = document.getElementById("togglePassword");
+
+        pwToggle.addEventListener("click", () => {
+            const hidden = pwInput.type === "password";
+            pwInput.type = hidden ? "text" : "password";
+            pwToggle.textContent = hidden ? "Hide" : "Show";
+        });
+
+        /* ---------- password strength hint ---------- */
+
+        const strengthFill = document.getElementById("strengthFill");
+        const strengthText = document.getElementById("strengthText");
+
+        pwInput.addEventListener("input", () => {
+            const v = pwInput.value;
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+            if (/\d/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v) || v.length >= 12) score++;
+
+            const levels = [
+                ["0%",   "#e3e9e4", "Use 8+ characters with letters and numbers."],
+                ["25%",  "#d9534f", "Weak - keep going."],
+                ["50%",  "#e8a33d", "Fair - add numbers or capitals."],
+                ["75%",  "#4caf68", "Good."],
+                ["100%", "#21713d", "Strong password."]
+            ];
+            const [width, color, text] = v ? levels[score] : levels[0];
+            strengthFill.style.width = width;
+            strengthFill.style.background = color;
+            strengthText.textContent = text;
+        });
+
+</script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Register — E-arthchakra</title>
+
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="icon" type="image/png" href="logo.png">
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+    <link rel="icon" type="image/svg+xml" href="brand-mark.svg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="brand.css">
+</head>
+
+
+<body class="login-page">
+
+
+    <!-- HEADER -->
+
+    <header class="login-header">
+
+        <div class="container">
+
+            <a
+                href="index.html"
+                class="logo"
+            ><span class="brand"><img src="brand-mark.svg" alt="" width="38" height="38"><span class="brand-word"><b>E</b>-arth<i>chakra</i></span></span></a>
+
+        </div>
+
+    </header>
+
+
+    <!-- REGISTER -->
+
+    <main class="login-main register-main">
+
+        <div class="register-wrap">
+
+
+            <!-- LEFT: BRAND PANEL -->
+
+            <aside class="register-aside">
+
+                <div class="eyebrow">
+                    BUSINESS PORTAL
+                </div>
+
+                <h1>
+                    Join E&#8209;arthchakra.
+                </h1>
+
+                <p class="register-lead">
+                    Create your business account and manage
+                    waste pickups from one place.
+                </p>
+
+                <ul class="register-benefits">
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Book pickups in minutes</strong>
+                            <span>Choose waste type, quantity and frequency.</span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Track every collection</strong>
+                            <span>See status from request to completion.</span>
+                        </div>
+                    </li>
+
+                    <li>
+                        <span class="benefit-icon">✓</span>
+                        <div>
+                            <strong>Verified collection partners</strong>
+                            <span>Your waste is handled responsibly.</span>
+                        </div>
+                    </li>
+
+                </ul>
+
+                <p class="register-aside-foot">
+                    Already registered?
+                    <a href="login.html">Sign in</a>
+                </p>
+
+            </aside>
+
+
+            <!-- RIGHT: FORM CARD -->
+
+            <div class="login-card register-card">
+
+                <div class="login-card-header">
+
+                    <h2>
+                        Create account
+                    </h2>
+
+                    <p>
+                        It takes less than a minute.
+                    </p>
+
+                </div>
+
+
+                <form id="registerForm" novalidate>
+
+
+                    <div class="form-section-title">
+                        About you
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="name">
+                                Full name <em>*</em>
+                            </label>
+                            <input
+                                type="text"
+                                id="name"
+                                placeholder="Your full name"
+                                autocomplete="name"
+                                required
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">
+                                Phone number
+                            </label>
+                            <input
+                                type="tel"
+                                id="phone"
+                                placeholder="+91 XXXXX XXXXX"
+                                autocomplete="tel"
+                            >
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="email">
+                                Email <em>*</em>
+                            </label>
+                            <input
+                                type="email"
+                                id="email"
+                                placeholder="you@company.com"
+                                autocomplete="email"
+                                required
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-section-title">
+                        Your business
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group full">
+                            <label for="businessName">
+                                Business name
+                            </label>
+                            <input
+                                type="text"
+                                id="businessName"
+                                placeholder="Your business name"
+                                autocomplete="organization"
+                            >
+                        </div>
+
+                        <div class="form-group">
+                            <label for="businessType">
+                                Business type
+                            </label>
+                            <select id="businessType">
+                                <option value="">Select type</option>
+                                <option value="Restaurant">Restaurant</option>
+                                <option value="Office">Office</option>
+                                <option value="Hotel">Hotel</option>
+                                <option value="Retail">Retail Store</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="city">
+                                City
+                            </label>
+                            <input
+                                type="text"
+                                id="city"
+                                placeholder="Your city"
+                                autocomplete="address-level2"
+                            >
+                        </div>
+
+                    </div>
+
+
+                    <div class="form-section-title">
+                        Secure your account
+                    </div>
+
+                    <div class="form-group">
+
+                        <label for="password">
+                            Password <em>*</em>
+                        </label>
+
+                        <div class="password-input">
+
+                            <input
+                                type="password"
+                                id="password"
+                                placeholder="At least 8 characters"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <button
+                                type="button"
+                                id="togglePassword"
+                                aria-label="Show password"
+                            >
+                                Show
+                            </button>
+
+                        </div>
+
+                        <div class="strength">
+                            <div class="strength-bar">
+                                <span id="strengthFill"></span>
+                            </div>
+                            <small id="strengthText">
+                                Use 8+ characters with letters and numbers.
+                            </small>
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="login-error"
+                        id="registerMessage"
+                    >
+                    </div>
+
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary btn-large login-submit"
+                    >
+                        Create Account
+                        <span>→</span>
+                    </button>
+
+
+                    <p class="login-terms">
+                        By creating an account, you agree to E-arthchakra's
+                        terms of service and privacy policy.
+                    </p>
+
+
+                </form>
+
+
+                <p class="register-mobile-signin">
+                    Already have an account?
+                    <a href="login.html">Sign in</a>
+                </p>
+
+
+            </div>
+
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="login-back"
+        >
+            ← Back to website
+        </a>
+
+
+    </main>
+
+
+    <script src="api.js"></script>
+
+    <script>
+
+
+        const registerForm =
+            document.getElementById("registerForm");
+
+
+        const registerMessage =
+            document.getElementById("registerMessage");
+
+
+        registerForm.addEventListener("submit", async (event) => {
+
+            event.preventDefault();
+
+            const value = (id) => document.getElementById(id).value.trim();
+
+            const fields = {
+                name: value("name"),
+                businessName: value("businessName"),
+                email: value("email"),
+                phone: value("phone"),
+                businessType: document.getElementById("businessType").value,
+                city: value("city"),
+                password: document.getElementById("password").value
+            };
+
+            if (!fields.name || !fields.email || !fields.password) {
+                registerMessage.textContent = "Please complete name, email and password.";
+                registerMessage.classList.add("show");
+                return;
+            }
+
+            if (fields.password.length < 8) {
+                registerMessage.textContent = "Password must be at least 8 characters.";
+                registerMessage.classList.add("show");
+                return;
+            }
+
+            const submitButton = registerForm.querySelector('button[type="submit"]');
+            submitButton.disabled = true;
+
+            try {
+                await EcoAPI.register(fields);
+                registerMessage.textContent = "Account created successfully. Opening your dashboard...";
+                registerMessage.classList.add("show");
+                setTimeout(() => { window.location.href = "dashboard.html"; }, 900);
+            } catch (error) {
+                registerMessage.textContent = error.message;
+                registerMessage.classList.add("show");
+                submitButton.disabled = false;
+            }
+        });
+
+
+
+        /* ---------- show / hide password ---------- */
+
+        const pwInput = document.getElementById("password");
+        const pwToggle = document.getElementById("togglePassword");
+
+        pwToggle.addEventListener("click", () => {
+            const hidden = pwInput.type === "password";
+            pwInput.type = hidden ? "text" : "password";
+            pwToggle.textContent = hidden ? "Hide" : "Show";
+        });
+
+        /* ---------- password strength hint ---------- */
+
+        const strengthFill = document.getElementById("strengthFill");
+        const strengthText = document.getElementById("strengthText");
+
+        pwInput.addEventListener("input", () => {
+            const v = pwInput.value;
+            let score = 0;
+            if (v.length >= 8) score++;
+            if (/[a-z]/.test(v) && /[A-Z]/.test(v)) score++;
+            if (/\d/.test(v)) score++;
+            if (/[^A-Za-z0-9]/.test(v) || v.length >= 12) score++;
+
+            const levels = [
+                ["0%",   "#e3e9e4", "Use 8+ characters with letters and numbers."],
+                ["25%",  "#d9534f", "Weak - keep going."],
+                ["50%",  "#e8a33d", "Fair - add numbers or capitals."],
+                ["75%",  "#4caf68", "Good."],
+                ["100%", "#21713d", "Strong password."]
+            ];
+            const [width, color, text] = v ? levels[score] : levels[0];
+            strengthFill.style.width = width;
+            strengthFill.style.background = color;
+            strengthText.textContent = text;
+        });
+
+</script>
+
+
+</body>
+
+</html>
